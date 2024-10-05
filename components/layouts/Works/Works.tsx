@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Tag {
     id: string;
@@ -29,24 +30,27 @@ export default function Works({ works }: WorksProps) {
                 <h2 className="text-4xl font-bold mb-8 text-center">Works</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {works.map((work) => (
-                        <div key={work.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                            <Image
-                                src={work.thumbnail.url}
-                                alt={work.title}
-                                width={work.thumbnail.width}
-                                height={work.thumbnail.height}
-                                className="w-full h-48 object-cover"
-                            />
-                            <div className="p-4">
-                                <h3 className="text-xl font-semibold mb-2">{work.title}</h3>
-                                <p className="text-gray-600 text-sm mb-4">{work.summary}</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {work.tags.map((tag) => (
-                                        <Badge key={tag.id} variant="secondary">{tag.tag}</Badge>
-                                    ))}
+                        <Link href={`/work/${work.id}`} key={work.id} className="block">
+                            <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+                                <div className="relative w-full h-48">
+                                    <Image
+                                        src={work.thumbnail.url}
+                                        alt={work.title}
+                                        layout="fill"
+                                        objectFit="cover"
+                                    />
+                                </div>
+                                <div className="p-4">
+                                    <h3 className="text-xl font-semibold mb-2">{work.title}</h3>
+                                    {/* <p className="text-gray-600 text-sm mb-4">{work.summary}</p> */}
+                                    <div className="flex flex-wrap gap-2">
+                                        {work.tags.map((tag) => (
+                                            <Badge key={tag.id} variant="secondary">{tag.tag}</Badge>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>

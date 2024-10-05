@@ -3,42 +3,45 @@ import Footer from '@/components/layouts/Footer/Footer'
 import Header from '@/components/layouts/Header/Header'
 import Top from '@/components/layouts/Top/top'
 import Works from '@/components/layouts/Works/Works'
+import { client } from '@/libs/client'
 
-// This function would typically fetch data from an API or read from a file
-async function getWorksData() {
-  // For now, we'll return mock data
-  return {
-    contents: [
-      {
-        id: "y4alrxiqiv7",
-        title: "UmiSiozaki.com",
-        summary: "A website for UmiSiozaki",
-        thumbnail: {
-          url: "https://images.microcms-assets.io/assets/2f8c420c6fb445c4baa4e7b57a40133b/ddaae6d253bf4f299d0402449e6597f9/4fftnweuaig.jpg",
-          height: 630,
-          width: 1200
-        },
-        tags: [
-          {
-            id: "yu2c7n8ocwr",
-            tag: "Next.js"
-          }
-        ]
-      },
-      // Add more mock data as needed
-    ]
+interface WorkItem {
+  id: string;
+  title: string;
+  summary: string;
+  thumbnail: {
+    url: string;
+    height: number;
+    width: number;
+  };
+  tags: {
+    id: string;
+    tag: string;
+  }[];
+}
+
+async function getWorks(): Promise<WorkItem[]> {
+  try {
+    const data = await client.getList({
+      endpoint: process.env.SERVICE_DOMAIN as string,
+      queries: { filters: 'category[contains]works' },
+    });
+    return data.contents;
+  } catch (error) {
+    console.error('Failed to fetch works:', error);
+    return [];
   }
 }
 
 export default async function Home() {
-  const worksData = await getWorksData()
+  const works = await getWorks();
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main>
         <Top></Top>
-        <Works works={worksData.contents} />
+        <Works works={works} />
         <About />
       </main>
       <Footer />
