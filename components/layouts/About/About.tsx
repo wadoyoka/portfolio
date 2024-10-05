@@ -11,8 +11,8 @@ export default function About() {
                         <Image
                             src="/logo.png"
                             alt="Enomoto Atsushi"
-                            layout="fill"
-                            objectFit="cover"
+                            fill
+                            style={{ objectFit: 'contain' }}
                             className="rounded-full"
                         />
                     </div>
