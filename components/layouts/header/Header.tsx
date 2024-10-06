@@ -2,8 +2,19 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Image from 'next/image'
 import Link from 'next/link'
+import { Suspense } from "react"
+import HamburgerMenu from "./HamburgerMenu"
+
+export const experimental_ppr = true;
 
 const Header = () => {
+    const menuItems = [
+        { href: "/", label: "Top" },
+        { href: "/about", label: "About" },
+        { href: "/blog", label: "Blog" },
+        { href: "/contact", label: "Contact" },
+    ]
+
     return (
         <header className="bg-blue-600 text-white">
             <div className="container mx-auto flex justify-between items-center py-4 max-w-7xl">
@@ -19,10 +30,13 @@ const Header = () => {
                 </Link>
                 <nav className="max-md:hidden">
                     <ul className="flex space-x-6">
-                        <li><Link href="/work" className="hover:underline">Work</Link></li>
-                        <li><Link href="/about" className="hover:underline">About</Link></li>
-                        <li><Link href="/blog" className="hover:underline">Blog</Link></li>
-                        <li><Link href="/contact" className="hover:underline">Contact</Link></li>
+                        {menuItems.map((item) => (
+                            <li key={item.href}>
+                                <Link href={item.href} className="hover:underline">
+                                    {item.label}
+                                </Link>
+                            </li>
+                        ))}
                     </ul>
                 </nav>
                 <div className="flex items-center space-x-2 max-md:hidden mr-1">
@@ -35,6 +49,9 @@ const Header = () => {
                         検索
                     </Button>
                 </div>
+                <Suspense fallback={<>loading...</>}>
+                    <HamburgerMenu menuItems={menuItems} />
+                </Suspense>
             </div>
         </header>
     )

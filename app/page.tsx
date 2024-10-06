@@ -22,11 +22,11 @@ interface WorkItem {
 
 async function getWorks(): Promise<WorkItem[]> {
   try {
-    const data = await client.getList({
+    const data = await client.getAllContents({
       endpoint: process.env.SERVICE_DOMAIN as string,
       queries: { filters: 'category[contains]works' },
     });
-    return data.contents;
+    return data; // Remove .contents as getAllContents directly returns the array of items
   } catch (error) {
     console.error('Failed to fetch works:', error);
     return [];

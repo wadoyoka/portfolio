@@ -1,3 +1,4 @@
+import TagBadge from "@/components/elements/TagBadge/TagBadge"
 import Footer from "@/components/layouts/Footer/Footer"
 import Header from "@/components/layouts/Header/Header"
 import { MokuziLiist } from '@/components/layouts/Mokuzi/Mokuzi'
@@ -69,9 +70,6 @@ export default async function Page({ params }: { params: { id: string } }) {
     try {
         const work = await getWork(params.id);
 
-        console.log('Raw start date:', work.createStartDate);
-        console.log('Raw end date:', work.createEndDate);
-
         const startDate = formatDate(work.createStartDate);
         const endDate = formatDate(work.createEndDate);
 
@@ -85,9 +83,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                         <h1 className="text-4xl font-bold mb-4">{work.title}</h1>
                         <div className="mb-4 flex flex-wrap gap-2">
                             {work.tags.map((tag) => (
-                                <Badge key={tag.id} variant="outline">
-                                    {tag.tag}
-                                </Badge>
+                                <TagBadge key={tag.id} tag={tag} />
                             ))}
                         </div>
                         <div className="mb-8">

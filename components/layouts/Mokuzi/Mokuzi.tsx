@@ -12,7 +12,7 @@ interface TableOfContentsProps {
 }
 
 export const MokuziLiist: React.FC<TableOfContentsProps> = ({ toc }) => {
-    let result: JSX.Element[] = [];
+    const result: JSX.Element[] = [];
     let h2List: JSX.Element[] = [];
 
     toc.forEach((data, index) => {
