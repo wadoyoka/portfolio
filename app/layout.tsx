@@ -1,3 +1,5 @@
+import Footer from '@/components/layouts/Footer/Footer'
+import Header from '@/components/layouts/Header/Header'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -6,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Enomoto Atsushi Portfolio',
-  description: 'Enomoto Atsushiのポートフォリオサイト',
+  description: 'Enomoto Atsushi\'s personal portfolio website',
 }
 
 export default function RootLayout({
@@ -15,11 +17,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ja">
-      <body className={inter.className}>
-        <div className="min-h-screen bg-background text-foreground">
+    <html lang="en">
+      <body className={`${inter.className} flex flex-col min-h-screen`}>
+        <Header />
+        <main className="flex-grow">
           {children}
-        </div>
+        </main>
+        <Footer />
       </body>
     </html>
   )

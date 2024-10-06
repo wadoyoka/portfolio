@@ -1,8 +1,6 @@
 import TagBadge from '@/components/elements/TagBadge/TagBadge'
-import Footer from '@/components/layouts/Footer/Footer'
-import Header from '@/components/layouts/Header/Header'
 import { Badge } from "@/components/ui/badge"
-import { client } from '@/libs/client'
+import { getAllContentIds, getAllContents, getContentById } from '@/utils/SSG/ssgUtils'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -25,48 +23,16 @@ interface WorkItem {
 }
 
 async function getWorksByTag(tagId: string): Promise<WorkItem[]> {
-    try {
-        const data = await client.getAllContents({
-            endpoint: process.env.SERVICE_DOMAIN as string,
-            queries: { filters: `tags[contains]${tagId}` },
-        });
-        return data;
-    } catch (error) {
-        console.error('Failed to fetch works by tag:', error);
-        return [];
-    }
+    return getAllContents<WorkItem>(process.env.SERVICE_DOMAIN as string, { filters: `tags[contains]${tagId}` });
 }
 
 async function getTagById(tagId: string): Promise<Tag | null> {
-    try {
-        const tag = await client.get({
-            endpoint: 'tag',
-            contentId: tagId,
-        });
-        return tag;
-    } catch (error) {
-        console.error('Failed to fetch tag:', error);
-        return null;
-    }
-}
-
-async function getAllTags(): Promise<Tag[]> {
-    try {
-        const tags = await client.getAllContents({
-            endpoint: 'tag',
-        });
-        return tags;
-    } catch (error) {
-        console.error('Failed to fetch all tags:', error);
-        return [];
-    }
+    return getContentById<Tag>('tag', tagId);
 }
 
 export async function generateStaticParams() {
-    const tags = await getAllTags();
-    return tags.map((tag) => ({
-        id: tag.id,
-    }));
+    const tagIds = await getAllContentIds('tag');
+    return tagIds.map((id) => ({ id }));
 }
 
 export default async function TagPage({ params }: { params: { id: string } }) {
@@ -79,7 +45,6 @@ export default async function TagPage({ params }: { params: { id: string } }) {
 
     return (
         <>
-            <Header />
             <div className="container mx-auto px-4 py-8">
                 <h1 className="text-3xl font-bold mb-6 flex items-center">
                     Works tagged with:
@@ -121,7 +86,6 @@ export default async function TagPage({ params }: { params: { id: string } }) {
                     ← Back to Home
                 </Link>
             </div>
-            <Footer />
         </>
     )
 }

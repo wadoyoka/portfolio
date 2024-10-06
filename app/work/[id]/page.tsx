@@ -1,10 +1,9 @@
 import TagBadge from "@/components/elements/TagBadge/TagBadge"
-import Footer from "@/components/layouts/Footer/Footer"
-import Header from "@/components/layouts/Header/Header"
+import styles from "@/components/layouts/Article/Article.module.scss"
 import { MokuziLiist } from '@/components/layouts/Mokuzi/Mokuzi'
 import { Badge } from "@/components/ui/badge"
-import { client } from '@/libs/client'
 import { renderToc } from '@/libs/render-toc'
+import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
 import { format, isValid, parseISO } from 'date-fns'
 import parse from 'html-react-parser'
 import Image from 'next/image'
@@ -30,33 +29,12 @@ interface WorkItem {
     tags: Tag[];
 }
 
-async function getWork(id: string): Promise<WorkItem> {
-    try {
-        const data = await client.get({
-            endpoint: process.env.SERVICE_DOMAIN as string,
-            contentId: id,
-        });
-        return data;
-    } catch (error) {
-        console.error('Failed to fetch work:', error);
-        throw new Error('Failed to fetch work');
-    }
-}
-
-async function getAllWorkIds(): Promise<string[]> {
-    try {
-        const data = await client.getAllContents({
-            endpoint: process.env.SERVICE_DOMAIN as string,
-        });
-        return data.map((content: { id: string }) => content.id);
-    } catch (error) {
-        console.error('Failed to fetch work IDs:', error);
-        return [];
-    }
+async function getWork(id: string): Promise<WorkItem | null> {
+    return getContentById<WorkItem>(process.env.SERVICE_DOMAIN as string, id);
 }
 
 export async function generateStaticParams() {
-    const ids = await getAllWorkIds();
+    const ids = await getAllContentIds(process.env.SERVICE_DOMAIN as string);
     return ids.map((id) => ({ id }));
 }
 
@@ -67,58 +45,55 @@ function formatDate(dateString: string | undefined): string {
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-    try {
-        const work = await getWork(params.id);
+    const work = await getWork(params.id);
 
-        const startDate = formatDate(work.createStartDate);
-        const endDate = formatDate(work.createEndDate);
-
-        const toc = renderToc(work.body);
-
-        return (
-            <>
-                <Header />
-                <main className="container mx-auto px-4 py-8 max-w-4xl">
-                    <article>
-                        <h1 className="text-4xl font-bold mb-4">{work.title}</h1>
-                        <div className="mb-4 flex flex-wrap gap-2">
-                            {work.tags.map((tag) => (
-                                <TagBadge key={tag.id} tag={tag} />
-                            ))}
-                        </div>
-                        <div className="mb-8">
-                            <Image
-                                src={work.thumbnail.url}
-                                alt={work.title}
-                                width={work.thumbnail.width}
-                                height={work.thumbnail.height}
-                                className="w-full h-auto rounded-lg"
-                                priority
-                            />
-                        </div>
-                        <h2 className="text-3xl font-semibold mb-4">{work.title}</h2>
-                        <div className="mb-4 flex flex-wrap gap-2">
-                            {work.tags.map((tag) => (
-                                <Badge key={tag.id} variant="outline">
-                                    {tag.tag}
-                                </Badge>
-                            ))}
-                        </div>
-                        <p className="text-lg mb-4">
-                            制作期間: {startDate} ~ {endDate}
-                        </p>
-                        <p className="text-xl mb-8">{work.summary}</p>
-                        <MokuziLiist toc={toc} />
-                        <div className="prose max-w-none">
-                            {parse(work.body)}
-                        </div>
-                    </article>
-                </main>
-                <Footer />
-            </>
-        );
-    } catch (error) {
-        console.error('Error fetching work:', error);
+    if (!work) {
         notFound();
     }
+
+    const startDate = formatDate(work.createStartDate);
+    const endDate = formatDate(work.createEndDate);
+
+    const toc = renderToc(work.body);
+
+    return (
+        <>
+            <main className="container mx-auto px-4 py-8 max-w-4xl">
+                <article>
+                    <h1 className="text-4xl font-bold mb-4">{work.title}</h1>
+                    <div className="mb-4 flex flex-wrap gap-2">
+                        {work.tags.map((tag) => (
+                            <TagBadge key={tag.id} tag={tag} />
+                        ))}
+                    </div>
+                    <div className="mb-8">
+                        <Image
+                            src={work.thumbnail.url}
+                            alt={work.title}
+                            width={work.thumbnail.width}
+                            height={work.thumbnail.height}
+                            className="w-full h-auto rounded-lg"
+                            priority
+                        />
+                    </div>
+                    <h2 className="text-3xl font-semibold mb-4">{work.title}</h2>
+                    <div className="mb-4 flex flex-wrap gap-2">
+                        {work.tags.map((tag) => (
+                            <Badge key={tag.id} variant="outline">
+                                {tag.tag}
+                            </Badge>
+                        ))}
+                    </div>
+                    <p className="text-lg mb-4">
+                        制作期間: {startDate} ~ {endDate}
+                    </p>
+                    <p className="text-xl mb-8">{work.summary}</p>
+                    <MokuziLiist toc={toc} />
+                    <div className={`${styles.post} prose max-w-none`}>
+                        {parse(work.body)}
+                    </div>
+                </article>
+            </main>
+        </>
+    );
 }

@@ -1,6 +1,4 @@
 import About from '@/components/layouts/About/About'
-import Footer from '@/components/layouts/Footer/Footer'
-import Header from '@/components/layouts/Header/Header'
 import Top from '@/components/layouts/Top/top'
 import Works from '@/components/layouts/Works/Works'
 import { client } from '@/libs/client'
@@ -38,13 +36,11 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main>
         <Top></Top>
         <Works works={works} />
         <About />
       </main>
-      <Footer />
     </div>
   )
 }

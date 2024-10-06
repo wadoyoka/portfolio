@@ -1,0 +1,199 @@
+.main {
+    max-width: 1280px;
+    display: flex;
+    margin: 0 auto;
+}
+
+.title {
+    padding: 0.5em 0;
+    margin: 0 0px 20px 0px;
+    max-width: 1280px;
+
+    &>h1 {
+        font-size: 40px;
+        color: #364e96;
+        /*文字色*/
+        /*上下の余白*/
+        border-top: solid 3px #364e96;
+        /*上線*/
+        text-align: left;
+    }
+
+    &>p {
+        color: #364e96;
+        border-bottom: solid 3px #364e96;
+        /*下線*/
+        text-align: left;
+    }
+}
+
+.post {
+    margin: 0 10px 0 10px;
+    color: #000000;
+    max-width: 1280px;
+    font-size: 16px;
+
+    h1 {
+        font-size: 28px;
+        font-weight: bold;
+        background: rgb(3 105 161);
+        box-shadow: 0px 0px 0px 5px rgb(3 105 161);
+        border: dashed 1px #96c2fe;
+        padding: 0.2em 0.5em;
+        color: #ffffff;
+        margin: 100px 0 30px 0;
+    }
+
+    &>h2 {
+        /*線の種類（実線） 太さ 色*/
+        border-bottom: solid 3px black;
+        margin: 40px 0 15px 0;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    &>p {
+        font-size: 16px;
+        line-height: 1.8;
+        letter-spacing: 0.2px;
+    }
+
+    &>ol {
+        font-size: 16px;
+        list-style-type: decimal;
+        list-style-position: inside;
+    }
+
+    &>figure {
+        width: fit-content;
+        margin: 10px 0;
+
+        &>img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+    }
+
+    &>div {
+        &>pre {
+            white-space: pre-wrap;
+            /* テキストを折り返す */
+            border: 1px solid #ccc;
+            /* 枠線を追加 */
+            padding: 10px;
+            /* 内側の余白を追加 */
+            color: #ffffff;
+            background-color: #000000;
+        }
+    }
+
+    &>ul,
+    &>ol {
+        background: #fcfcfc;
+        /*背景色*/
+        padding: 0.5em 0.5em 0.5em 2em;
+        /*ボックス内の余白*/
+        border: solid 3px rgb(0, 0, 0);
+        /*線の種類 太さ 色*/
+
+        margin: 10px 0;
+
+        &>li {
+            line-height: 1.5;
+            /*文の行高*/
+            padding: 0.5em 0;
+            /*前後の文との余白*/
+        }
+    }
+
+    &>ul {
+        &>li {
+            list-style: disc;
+        }
+    }
+
+    &>ol {
+        &>li {
+            list-style: decimal;
+        }
+    }
+
+    &>table {
+        margin: 10px 0;
+        width: 100%;
+        text-align: center;
+        border-collapse: collapse;
+        border-spacing: 0;
+
+        th {
+            padding: 10px;
+            background: #778ca3;
+            border: solid 1px #666666;
+            color: #ffffff;
+        }
+
+        td {
+            padding: 10px;
+            border: solid 1px #666666;
+        }
+
+        td:first-child {
+            background: #e9faf9;
+
+        }
+
+    }
+
+    blockquote {
+        margin: 10px 0;
+        position: relative;
+        padding: 10px 15px 10px 60px;
+        box-sizing: border-box;
+        font-style: italic;
+        background: #f5f5f5;
+        color: #777777;
+        border-left: 4px solid #9dd4ff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
+    }
+
+    blockquote:before {
+        display: inline-block;
+        position: absolute;
+        top: 7px;
+        left: 0;
+        content: "“";
+        font-family: sans-serif;
+        color: #9dd4ff;
+        font-size: 90px;
+        line-height: 1;
+    }
+
+    blockquote p {
+        padding: 0;
+        margin: 7px 0;
+        line-height: 1.7;
+    }
+
+    blockquote cite {
+        display: block;
+        text-align: right;
+        color: #888888;
+        font-size: 0.9em;
+    }
+
+    a {
+        color: #5d85ff;
+        text-decoration: underline;
+    }
+
+    a:hover {
+        color: #ff7043;
+    }
+
+    a:visited {
+        color: #a967ff;
+    }
+
+}
