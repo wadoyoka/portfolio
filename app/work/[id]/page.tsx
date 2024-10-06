@@ -1,27 +1,22 @@
+import Footer from "@/components/layouts/Footer/Footer"
+import Header from "@/components/layouts/Header/Header"
 import { Badge } from "@/components/ui/badge"
 import { client } from '@/libs/client'
-import { format } from 'date-fns'
+import { format, isValid, parseISO } from 'date-fns'
 import parse from 'html-react-parser'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
 interface Tag {
     id: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-    revisedAt: string;
     tag: string;
 }
 
 interface WorkItem {
     id: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-    revisedAt: string;
     title: string;
-    createStartDate: string;
+    createStartDate?: string;
+    createEndDate?: string;
     summary: string;
     body: string;
     thumbnail: {
@@ -29,8 +24,6 @@ interface WorkItem {
         height: number;
         width: number;
     };
-    isThumbnailTitle: boolean;
-    category: string[];
     tags: Tag[];
 }
 
@@ -64,45 +57,59 @@ export async function generateStaticParams() {
     return ids.map((id) => ({ id }));
 }
 
+function formatDate(dateString: string | undefined): string {
+    if (!dateString) return 'Not specified';
+    const date = parseISO(dateString);
+    return isValid(date) ? format(date, 'yyyy/MM/dd') : 'Invalid Date';
+}
+
 export default async function Page({ params }: { params: { id: string } }) {
     try {
         const work = await getWork(params.id);
 
+        console.log('Raw start date:', work.createStartDate);
+        console.log('Raw end date:', work.createEndDate);
+
+        const startDate = formatDate(work.createStartDate);
+        const endDate = formatDate(work.createEndDate);
+
         return (
-            <div className="container mx-auto px-4 py-8">
-                <h1 className="text-4xl font-bold mb-4">{work.title}</h1>
-                <div className="mb-6">
-                    <Image
-                        src={work.thumbnail.url}
-                        alt={work.title}
-                        width={work.thumbnail.width}
-                        height={work.thumbnail.height}
-                        className="rounded-lg"
-                    />
-                </div>
-                <div className="flex flex-wrap gap-2 mb-4">
-                    {work.tags.map((tag) => (
-                        <Badge key={tag.id} variant="secondary">{tag.tag}</Badge>
-                    ))}
-                </div>
-                <div className="text-sm text-gray-500 mb-4">
-                    <p>Created: {format(new Date(work.createdAt), 'PPP')}</p>
-                    <p>Last Updated: {format(new Date(work.updatedAt), 'PPP')}</p>
-                    <p>Project Start Date: {format(new Date(work.createStartDate), 'PPP')}</p>
-                </div>
-                <div className="mb-4">
-                    <h2 className="text-2xl font-semibold mb-2">Categories</h2>
-                    <div className="flex flex-wrap gap-2">
-                        {work.category.map((cat, index) => (
-                            <Badge key={index} variant="outline">{cat}</Badge>
+            <><Header />
+                <div className="container mx-auto px-4 py-8 max-w-4xl">
+                    <h1 className="text-4xl font-bold mb-4">{work.title}</h1>
+                    <div className="mb-4">
+                        {work.tags.map((tag) => (
+                            <Badge key={tag.id} variant="outline" className="mr-2">
+                                {tag.tag}
+                            </Badge>
                         ))}
                     </div>
+                    <div className="mb-8">
+                        <Image
+                            src={work.thumbnail.url}
+                            alt={work.title}
+                            width={work.thumbnail.width}
+                            height={work.thumbnail.height}
+                            className="w-full h-auto rounded-lg" />
+                    </div>
+                    <h2 className="text-3xl font-semibold mb-4">{work.title}</h2>
+                    <div className="mb-4">
+                        {work.tags.map((tag) => (
+                            <Badge key={tag.id} variant="outline" className="mr-2">
+                                {tag.tag}
+                            </Badge>
+                        ))}
+                    </div>
+                    <p className="text-lg mb-4">
+                        制作期間: {startDate} ~ {endDate}
+                    </p>
+                    <p className="text-xl mb-8">{work.summary}</p>
+                    <div className="prose max-w-none">
+                        {parse(work.body)}
+                    </div>
                 </div>
-                <p className="text-xl mb-4">{work.summary}</p>
-                <div className="prose max-w-none">
-                    {parse(work.body)}
-                </div>
-            </div>
+                <Footer />
+            </>
         );
     } catch (error) {
         console.error('Error fetching work:', error);

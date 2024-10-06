@@ -45,7 +45,7 @@ export default function Works({ works }: WorksProps) {
                                     {/* <p className="text-gray-600 text-sm mb-4">{work.summary}</p> */}
                                     <div className="flex flex-wrap gap-2">
                                         {work.tags.map((tag) => (
-                                            <Badge key={tag.id} variant="secondary">{tag.tag}</Badge>
+                                            <Badge key={tag.id} variant="outline">{tag.tag}</Badge>
                                         ))}
                                     </div>
                                 </div>
