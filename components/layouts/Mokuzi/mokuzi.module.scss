@@ -1,0 +1,58 @@
+.toc_002 {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    border: 2px solid #2589d0;
+    border-radius: 3px;
+
+    >div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 10px 0;
+        background-color: #2589d0;
+        color: #fff;
+        font-weight: 600;
+        font-size: 1.1em;
+
+        &::before {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            margin-right: 5px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 4H21V6H8V4ZM3 3.5H6V6.5H3V3.5ZM3 10.5H6V13.5H3V10.5ZM3 17.5H6V20.5H3V17.5ZM8 11H21V13H8V11ZM8 18H21V20H8V18Z' fill='%23fff'%3E%3C/path%3E%3C/svg%3E");
+            content: '';
+        }
+    }
+
+    >ol {
+        list-style-type: decimal;
+        margin: 0;
+        overflow: hidden;
+        padding: 1em 1em 1em 3em;
+
+        li {
+            padding: 5px 0;
+            font-weight: 600;
+        }
+
+        ol {
+            padding-left: 1.1em;
+
+            li {
+                font-weight: 500;
+                font-size: .9em;
+            }
+        }
+    }
+
+    a {
+        color: #333;
+        text-decoration: none;
+    }
+}
+
+.sublist {
+    list-style-type: decimal;
+    padding-left: 1.1em;
+}
