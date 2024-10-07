@@ -18,7 +18,7 @@ export default function Footer() {
                     </div>
                     <nav>
                         <ul className="flex space-x-6">
-                            <li><Link href="/work" className="hover:underline">Work</Link></li>
+                            <li><Link href="/" className="hover:underline">Top</Link></li>
                             <li><Link href="/about" className="hover:underline">About</Link></li>
                             <li><Link href="/blog" className="hover:underline">Blog</Link></li>
                             <li><Link href="/contact" className="hover:underline">Contact</Link></li>

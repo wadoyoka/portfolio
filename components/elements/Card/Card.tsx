@@ -14,9 +14,11 @@ interface CardProps {
     thumbnailUrl: string;
     tags: Tag[];
     linkPrefix?: string;
+    publishedAt?: string;
+    summary?: string;
 }
 
-const Card: React.FC<CardProps> = ({ id, title, thumbnailUrl, tags, linkPrefix = '/work/' }) => {
+const Card: React.FC<CardProps> = ({ id, title, thumbnailUrl, tags, linkPrefix = '/work/', publishedAt, summary }) => {
     return (
         <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
             <Link href={`${linkPrefix}${id}`} className="block">
@@ -28,8 +30,14 @@ const Card: React.FC<CardProps> = ({ id, title, thumbnailUrl, tags, linkPrefix =
                         style={{ objectFit: 'contain' }}
                     />
                 </div>
-                <div className="px-4">
+                <div className="p-4">
                     <h3 className="text-xl font-semibold mb-2">{title}</h3>
+                    {publishedAt && (
+                        <p className="text-sm text-gray-500 mb-2">
+                            Published: {new Date(publishedAt).toLocaleDateString()}
+                        </p>
+                    )}
+                    {summary && <p className="text-gray-600 text-sm mb-2">{summary}</p>}
                 </div>
             </Link>
             <div className="px-4 pb-4">
