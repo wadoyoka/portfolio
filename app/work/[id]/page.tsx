@@ -34,7 +34,7 @@ async function getWork(id: string): Promise<WorkItem | null> {
 }
 
 export async function generateStaticParams() {
-    const ids = await getAllContentIds(process.env.SERVICE_DOMAIN as string);
+    const ids = await getAllContentIds(process.env.SERVICE_DOMAIN as string, 'works');
     return ids.map((id) => ({ id }));
 }
 

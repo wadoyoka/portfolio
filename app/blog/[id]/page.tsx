@@ -32,7 +32,7 @@ async function getBlogPost(id: string): Promise<BlogPost | null> {
 }
 
 export async function generateStaticParams() {
-    const ids = await getAllContentIds(process.env.SERVICE_DOMAIN as string);
+    const ids = await getAllContentIds(process.env.SERVICE_DOMAIN as string, 'blog');
     return ids.map((id) => ({ id }));
 }
 

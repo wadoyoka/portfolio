@@ -6,13 +6,26 @@ interface ContentItem {
     [key: string]: any;
 }
 
-export async function getAllContentIds(endpoint: string): Promise<string[]> {
+export async function getAllContentIds(endpoint: string, category: string): Promise<string[]> {
     try {
-        const data = await client.getAllContents({
-            endpoint: endpoint,
-            queries: { fields: 'id' }
-        });
-        return data.map((content: ContentItem) => content.id);
+        if(category === ''){
+            const data = await client.getAllContents({
+                endpoint: endpoint,
+                queries: {
+                    fields: 'id'
+                }
+            });
+            return data.map((content: ContentItem) => content.id);
+        }else{
+            const data = await client.getAllContents({
+                endpoint: endpoint,
+                queries: {
+                    fields: 'id',
+                    filters: `category[contains]${category}`
+                }
+            });
+            return data.map((content: ContentItem) => content.id);
+        }
     } catch (error) {
         console.error(`Failed to fetch ${endpoint} IDs:`, error);
         return [];

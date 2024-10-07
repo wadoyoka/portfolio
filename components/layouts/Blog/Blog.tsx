@@ -37,7 +37,6 @@ export default function Blog({ blogPosts }: BlogProps) {
                             tags={post.tags}
                             linkPrefix="/blog/"
                             publishedAt={post.publishedAt}
-                            summary={post.summary}
                         />
                     ))}
                 </div>

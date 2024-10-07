@@ -33,7 +33,7 @@ async function getTagById(tagId: string): Promise<Tag | null> {
 }
 
 export async function generateStaticParams() {
-    const tagIds = await getAllContentIds('tag');
+    const tagIds = await getAllContentIds('tag','');
     return tagIds.map((id) => ({ id }));
 }
 
