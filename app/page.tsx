@@ -1,7 +1,6 @@
-import About from '@/components/layouts/About/About'
-import Top from '@/components/layouts/Top/top'
-import Works from '@/components/layouts/Works/Works'
-import { client } from '@/libs/client'
+import Top from '@/components/layouts/Top/top';
+import Works from '@/components/layouts/Works/Works';
+import { client } from '@/libs/client';
 
 interface WorkItem {
   id: string;
@@ -39,7 +38,6 @@ export default async function Home() {
       <main>
         <Top></Top>
         <Works works={works} />
-        <About />
       </main>
     </div>
   )

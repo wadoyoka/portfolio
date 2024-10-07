@@ -1,7 +1,7 @@
 import TagBadge from "@/components/elements/TagBadge/TagBadge"
+import About from "@/components/layouts/About/About"
 import styles from "@/components/layouts/Article/Article.module.scss"
 import { MokuziLiist } from '@/components/layouts/Mokuzi/Mokuzi'
-import { Badge } from "@/components/ui/badge"
 import { renderToc } from '@/libs/render-toc'
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
 import { format, isValid, parseISO } from 'date-fns'
@@ -58,41 +58,42 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <>
-            <main className="container mx-auto px-4 py-8 max-w-4xl">
-                <article>
-                    <h1 className="text-4xl font-bold mb-4">{work.title}</h1>
-                    <div className="mb-4 flex flex-wrap gap-2">
-                        {work.tags.map((tag) => (
-                            <TagBadge key={tag.id} tag={tag} />
-                        ))}
-                    </div>
-                    <div className="mb-8">
-                        <Image
-                            src={work.thumbnail.url}
-                            alt={work.title}
-                            width={work.thumbnail.width}
-                            height={work.thumbnail.height}
-                            className="w-full h-auto rounded-lg"
-                            priority
-                        />
-                    </div>
-                    <h2 className="text-3xl font-semibold mb-4">{work.title}</h2>
-                    <div className="mb-4 flex flex-wrap gap-2">
-                        {work.tags.map((tag) => (
-                            <Badge key={tag.id} variant="outline">
-                                {tag.tag}
-                            </Badge>
-                        ))}
-                    </div>
-                    <p className="text-lg mb-4">
-                        制作期間: {startDate} ~ {endDate}
-                    </p>
-                    <p className="text-xl mb-8">{work.summary}</p>
-                    <MokuziLiist toc={toc} />
-                    <div className={`${styles.post} prose max-w-none`}>
-                        {parse(work.body)}
-                    </div>
-                </article>
+            <main>
+                <div className="container mx-auto px-4 py-8 max-w-7xl mb-32">
+                    <article>
+                        <h1 className="text-4xl font-bold mb-4">{work.title}</h1>
+                        <div className="mb-4 flex flex-wrap gap-2">
+                            {work.tags.map((tag) => (
+                                <TagBadge key={tag.id} tag={tag} />
+                            ))}
+                        </div>
+                        <div className="mb-8">
+                            <Image
+                                src={work.thumbnail.url}
+                                alt={work.title}
+                                width={work.thumbnail.width}
+                                height={work.thumbnail.height}
+                                className="w-full h-auto rounded-lg"
+                                priority
+                            />
+                        </div>
+                        <h2 className="text-3xl font-semibold mb-4">{work.title}</h2>
+                        <div className="mb-4 flex flex-wrap gap-2">
+                            {work.tags.map((tag) => (
+                                <TagBadge key={tag.id} tag={tag} />
+                            ))}
+                        </div>
+                        <p className="text-lg mb-4">
+                            制作期間: {startDate} ~ {endDate}
+                        </p>
+                        <p className="text-xl mb-8">{work.summary}</p>
+                        <MokuziLiist toc={toc} />
+                        <div className={`${styles.post} prose max-w-none`}>
+                            {parse(work.body)}
+                        </div>
+                    </article>
+                </div>
+                <About />
             </main>
         </>
     );

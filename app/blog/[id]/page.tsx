@@ -1,4 +1,5 @@
 import TagBadge from "@/components/elements/TagBadge/TagBadge"
+import About from "@/components/layouts/About/About"
 import { MokuziLiist } from '@/components/layouts/Mokuzi/Mokuzi'
 import { renderToc } from '@/libs/render-toc'
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
@@ -28,7 +29,7 @@ interface BlogPost {
 }
 
 async function getBlogPost(id: string): Promise<BlogPost | null> {
-    return getContentById<BlogPost>(process.env.SERVICE_DOMAIN as string , id);
+    return getContentById<BlogPost>(process.env.SERVICE_DOMAIN as string, id);
 }
 
 export async function generateStaticParams() {
@@ -56,34 +57,37 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
 
     return (
         <>
-            <main className="container mx-auto px-4 py-8 max-w-4xl">
-                <article>
-                    <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-                    <div className="mb-4 flex flex-wrap gap-2">
-                        {post.tags.map((tag) => (
-                            <TagBadge key={tag.id} tag={tag} />
-                        ))}
-                    </div>
-                    <div className="mb-8">
-                        <Image
-                            src={post.thumbnail.url}
-                            alt={post.title}
-                            width={post.thumbnail.width}
-                            height={post.thumbnail.height}
-                            className="w-full h-auto rounded-lg"
-                            priority
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <p className="text-gray-600">Published: {publishedDate}</p>
-                        {post.updatedAt && <p className="text-gray-600">Last updated: {updatedDate}</p>}
-                    </div>
-                    <p className="text-xl mb-8">{post.summary}</p>
-                    <MokuziLiist toc={toc} />
-                    <div className="prose max-w-none">
-                        {parse(post.body)}
-                    </div>
-                </article>
+            <main>
+                <div className="container mx-auto px-4 py-8 max-w-7xl mb-32">
+                    <article>
+                        <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+                        <div className="mb-4 flex flex-wrap gap-2">
+                            {post.tags.map((tag) => (
+                                <TagBadge key={tag.id} tag={tag} />
+                            ))}
+                        </div>
+                        <div className="mb-8">
+                            <Image
+                                src={post.thumbnail.url}
+                                alt={post.title}
+                                width={post.thumbnail.width}
+                                height={post.thumbnail.height}
+                                className="w-full h-auto rounded-lg"
+                                priority
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <p className="text-gray-600">Published: {publishedDate}</p>
+                            {post.updatedAt && <p className="text-gray-600">Last updated: {updatedDate}</p>}
+                        </div>
+                        <p className="text-xl mb-8">{post.summary}</p>
+                        <MokuziLiist toc={toc} />
+                        <div className="prose max-w-none">
+                            {parse(post.body)}
+                        </div>
+                    </article>
+                </div>
+                <About />
             </main>
         </>
     );

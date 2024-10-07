@@ -1,10 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { FaGithub, FaTwitter } from 'react-icons/fa'
 
 export default function Footer() {
     return (
         <footer className="bg-blue-600 text-white py-8 mt-auto">
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 max-w-7xl">
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className="flex items-center mb-4 md:mb-0">
                         <Image
@@ -24,6 +25,14 @@ export default function Footer() {
                             <li><Link href="/contact" className="hover:underline">Contact</Link></li>
                         </ul>
                     </nav>
+                </div>
+                <div className="mt-4 flex justify-center space-x-4">
+                    <Link href="https://x.com/wadoyoka" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-200">
+                        <FaTwitter size={24} />
+                    </Link>
+                    <Link href="https://github.com/wadoyoka" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-200">
+                        <FaGithub size={24} />
+                    </Link>
                 </div>
                 <div className="mt-4 text-center">
                     <p>&copy; Enomoto Atsushi from 2024</p>

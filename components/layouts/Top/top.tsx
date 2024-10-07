@@ -1,7 +1,7 @@
 import Image from "next/image"
 const Top = () => {
     return (
-        <div className="flex-grow container mx-auto px-4 py-12 flex items-center justify-center h-svh">
+        <div className="flex-grow container mx-auto px-4 py-12 flex items-center justify-center min-h-[80vh]">
             <div className="w-full max-w-7xl">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-center">
                     <div className="text-center col-span-1 md:col-span-3">
