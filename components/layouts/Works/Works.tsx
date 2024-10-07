@@ -1,6 +1,4 @@
-import TagBadge from "@/components/elements/TagBadge/TagBadge";
-import Image from 'next/image';
-import Link from 'next/link';
+import Card from '@/components/elements/Card/Card';
 
 interface Tag {
     id: string;
@@ -10,7 +8,6 @@ interface Tag {
 interface WorkItem {
     id: string;
     title: string;
-    summary: string;
     thumbnail: {
         url: string;
         height: number;
@@ -30,27 +27,13 @@ export default function Works({ works }: WorksProps) {
                 <h2 className="text-4xl font-bold mb-8 text-center">Works</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {works.map((work) => (
-                        <div key={work.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
-                            <Link href={`/work/${work.id}`} className="block">
-                                <div className="relative w-full h-48">
-                                    <Image
-                                        src={work.thumbnail.url}
-                                        alt={work.title}
-                                        fill
-                                        style={{ objectFit: 'contain' }}
-                                    />
-                                </div>
-                            </Link>
-                            <div className="p-4">
-                                <h3 className="text-xl font-semibold mb-2">{work.title}</h3>
-                                {/* <p className="text-gray-600 text-sm mb-4">{work.summary}</p> */}
-                                <div className="flex flex-wrap gap-2">
-                                    {work.tags.map((tag) => (
-                                        <TagBadge key={tag.id} tag={tag} />
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
+                        <Card
+                            key={work.id}
+                            id={work.id}
+                            title={work.title}
+                            thumbnailUrl={work.thumbnail.url}
+                            tags={work.tags}
+                        />
                     ))}
                 </div>
             </div>
