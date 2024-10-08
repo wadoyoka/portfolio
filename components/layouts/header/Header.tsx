@@ -2,10 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Image from 'next/image'
 import Link from 'next/link'
-import { Suspense } from "react"
 import HamburgerMenu from "./HamburgerMenu"
-
-export const experimental_ppr = true;
 
 const Header = () => {
     const menuItems = [
@@ -49,9 +46,7 @@ const Header = () => {
                         検索
                     </Button>
                 </div>
-                <Suspense fallback={<>loading...</>}>
-                    <HamburgerMenu menuItems={menuItems} />
-                </Suspense>
+                <HamburgerMenu menuItems={menuItems} />
             </div>
         </header>
     )
