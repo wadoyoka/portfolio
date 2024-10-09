@@ -1,19 +1,50 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { createTransport } from 'nodemailer'
+
+// Create a transporter using Gmail's SMTP server
+const transporter = createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
+    },
+})
 
 export async function sendEmail(formData: FormData) {
-    const name = formData.get('name')
-    const email = formData.get('email')
-    const message = formData.get('message')
+    const name = formData.get('name') as string
+    const email = formData.get('email') as string
+    const message = formData.get('message') as string
 
-    // Here you would typically send the email using your preferred method
-    // For example, using a service like SendGrid or your own SMTP server
-    console.log('Sending email:', { name, email, message })
+    if (!name || !email || !message) {
+        throw new Error('All fields are required')
+    }
 
-    // Simulate a delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    const mailOptions = {
+        from: email,
+        to: process.env.GMAIL_USER,
+        subject: `New contact form submission from ${name}`,
+        text: `
+      Name: ${name}
+      Email: ${email}
+      Message: ${message}
+    `,
+        html: `
+      <h1>New Contact Form Submission</h1>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Message:</strong></p>
+      <p>${message.replace(/\n/g, '<br>')}</p>
+    `,
+    }
 
-    // Redirect to a thank you page
-    redirect('/thank')
+    try {
+        await transporter.sendMail(mailOptions)
+        console.log('Email sent successfully')
+        redirect('/thank')
+    } catch (error) {
+        console.error('Error sending email:', error)
+        throw new Error('Failed to send email. Please try again later.')
+    }
 }
