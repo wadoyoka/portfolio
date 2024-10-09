@@ -1,9 +1,25 @@
+'use client'
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { sendEmail } from "@/lib/mail"
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function Contact() {
+    const router = useRouter()
+    const [error, setError] = useState<string | null>(null)
+
+    async function handleSubmit(formData: FormData) {
+        const result = await sendEmail(formData)
+        if (result.success) {
+            router.push('/thank')
+        } else {
+            setError(result.message)
+        }
+    }
+
     return (
         <div className="container mx-auto px-4 py-8 min-h-[80vh]">
             <h1 className="text-4xl font-bold mb-6">Contact</h1>
@@ -15,7 +31,8 @@ export default function Contact() {
                 下記のフォームからメッセージを送っていただければ、できるだけ早くご返信いたします。
                 SNSでもつながっていただけると嬉しいです！
             </p>
-            <form action={sendEmail} className="space-y-6">
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+            <form action={handleSubmit} className="space-y-6">
                 <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                         Name
