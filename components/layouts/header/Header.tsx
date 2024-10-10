@@ -1,19 +1,20 @@
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Menu } from "lucide-react"
 import Image from 'next/image'
 import Link from 'next/link'
-import HamburgerMenu from "./HamburgerMenu"
+import HeaderSearch from "./HeaderSearch"
 
-const Header = () => {
-    const menuItems = [
-        { href: "/", label: "Top" },
-        { href: "/about", label: "About" },
-        { href: "/blog", label: "Blog" },
-        { href: "/contact", label: "Contact" },
-    ]
+const menuItems = [
+    { href: "/", label: "Top" },
+    { href: "/about", label: "About" },
+    { href: "/blog", label: "Blog" },
+    { href: "/contact", label: "Contact" },
+]
 
+export default function Header() {
     return (
-        <header className="bg-blue-600 text-white">
+        <header className="bg-primary text-primary-foreground">
             <div className="container mx-auto flex justify-between items-center py-4 max-w-7xl">
                 <Link href="/" className="flex items-center">
                     <Image
@@ -25,7 +26,7 @@ const Header = () => {
                     />
                     <span className="text-2xl font-bold">Enomoto Atsushi</span>
                 </Link>
-                <nav className="max-md:hidden">
+                <nav className="hidden md:block">
                     <ul className="flex space-x-6">
                         {menuItems.map((item) => (
                             <li key={item.href}>
@@ -36,20 +37,30 @@ const Header = () => {
                         ))}
                     </ul>
                 </nav>
-                <div className="flex items-center space-x-2 max-md:hidden mr-1">
-                    <Input
-                        type="search"
-                        placeholder="検索..."
-                        className="w-40 lg:w-64 bg-white text-black"
-                    />
-                    <Button variant="secondary" size="sm" className="bg-white text-blue-600 hover:bg-blue-100">
-                        検索
-                    </Button>
+                <div className="hidden md:block">
+                    <HeaderSearch />
                 </div>
-                <HamburgerMenu menuItems={menuItems} />
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button variant="ghost" size="icon" className="md:hidden">
+                            <Menu className="h-6 w-6" />
+                            <span className="sr-only">Toggle menu</span>
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                        <nav className="flex flex-col gap-4">
+                            {menuItems.map((item) => (
+                                <Link key={item.href} href={item.href} className="block px-2 py-1 text-lg">
+                                    {item.label}
+                                </Link>
+                            ))}
+                        </nav>
+                        <div className="mt-6">
+                            <HeaderSearch />
+                        </div>
+                    </SheetContent>
+                </Sheet>
             </div>
         </header>
     )
 }
-
-export default Header

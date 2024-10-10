@@ -3,21 +3,60 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { sendEmail } from "@/lib/mail"
+import { useToast } from "@/hooks/use-toast"
+import { sendEmail } from "@/utils/mail"
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 
 export default function Contact() {
     const router = useRouter()
-    const [error, setError] = useState<string | null>(null)
+    const { toast } = useToast()
+    const [isPending, startTransition] = useTransition()
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    })
 
-    async function handleSubmit(formData: FormData) {
-        const result = await sendEmail(formData)
-        if (result.success) {
-            router.push('/thank')
-        } else {
-            setError(result.message)
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target
+        setFormData(prev => ({ ...prev, [name]: value }))
+    }
+
+    const validateForm = () => {
+        if (formData.name.trim() === '') {
+            toast({ title: "Error", description: "Name is required", variant: "destructive" })
+            return false
         }
+        if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+            toast({ title: "Error", description: "Invalid email address", variant: "destructive" })
+            return false
+        }
+        if (formData.message.trim().length < 10) {
+            toast({ title: "Error", description: "Message must be at least 10 characters long", variant: "destructive" })
+            return false
+        }
+        return true
+    }
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if (!validateForm()) return
+
+        startTransition(async () => {
+            const formDataToSend = new FormData()
+            Object.entries(formData).forEach(([key, value]) => {
+                formDataToSend.append(key, value)
+            })
+
+            const result = await sendEmail(formDataToSend)
+            if (result.success) {
+                toast({ title: "Success", description: "Email sent successfully" })
+                router.push('/thank')
+            } else {
+                toast({ title: "Error", description: result.message, variant: "destructive" })
+            }
+        })
     }
 
     return (
@@ -31,8 +70,7 @@ export default function Contact() {
                 下記のフォームからメッセージを送っていただければ、できるだけ早くご返信いたします。
                 SNSでもつながっていただけると嬉しいです！
             </p>
-            {error && <p className="text-red-500 mb-4">{error}</p>}
-            <form action={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                         Name
@@ -40,6 +78,8 @@ export default function Contact() {
                     <Input
                         id="name"
                         name="name"
+                        value={formData.name}
+                        onChange={handleChange}
                         required
                     />
                 </div>
@@ -51,6 +91,8 @@ export default function Contact() {
                         id="email"
                         name="email"
                         type="email"
+                        value={formData.email}
+                        onChange={handleChange}
                         required
                     />
                 </div>
@@ -61,12 +103,14 @@ export default function Contact() {
                     <Textarea
                         id="message"
                         name="message"
+                        value={formData.message}
+                        onChange={handleChange}
                         required
                         rows={6}
                     />
                 </div>
-                <Button type="submit" className="w-full">
-                    送信する
+                <Button type="submit" className="w-full" disabled={isPending}>
+                    {isPending ? 'Sending...' : '送信する'}
                 </Button>
             </form>
         </div>

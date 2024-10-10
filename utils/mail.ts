@@ -1,7 +1,10 @@
 'use server'
 
+import { headers } from 'next/headers'
+import { NextRequest } from 'next/server'
 import nodemailer from 'nodemailer'
 import { z } from 'zod'
+import { checkRateLimitAction } from './ratelimit'
 
 // Email validation schema
 const emailSchema = z.object({
@@ -35,29 +38,19 @@ transporter.verify((error) => {
     }
 })
 
-// Simple in-memory rate limiting
-const rateLimitMap = new Map<string, number[]>()
-const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour in milliseconds
-const MAX_REQUESTS = 5
+export async function sendEmail(formData: FormData) {
+    // Create a mock NextRequest object
+    const mockRequest = {
+        headers: headers(),
+        ip: headers().get('x-forwarded-for') || 'unknown',
+    } as NextRequest
 
-function checkRateLimit(email: string): boolean {
-    const now = Date.now()
-    const userRequests = rateLimitMap.get(email) || []
-
-    // Remove timestamps older than the rate limit window
-    const recentRequests = userRequests.filter(timestamp => now - timestamp < RATE_LIMIT_WINDOW)
-
-    if (recentRequests.length >= MAX_REQUESTS) {
-        return false
+    // Check email rate limit
+    const { allowed, message: rateMessage, remainingAttempts } = await checkRateLimitAction(mockRequest, 'email')
+    if (!allowed) {
+        return { success: false, message: rateMessage, remainingAttempts }
     }
 
-    recentRequests.push(now)
-    rateLimitMap.set(email, recentRequests)
-
-    return true
-}
-
-export async function sendEmail(formData: FormData) {
     // Validate form data
     const validatedFields = emailSchema.safeParse({
         name: formData.get('name'),
@@ -66,15 +59,10 @@ export async function sendEmail(formData: FormData) {
     })
 
     if (!validatedFields.success) {
-        return { success: false, message: validatedFields.error.errors[0].message }
+        return { success: false, message: validatedFields.error.errors[0].message, remainingAttempts }
     }
 
     const { name, email, message } = validatedFields.data
-
-    // Check rate limit
-    if (!checkRateLimit(email)) {
-        return { success: false, message: 'Rate limit exceeded. Please try again later.' }
-    }
 
     const mailOptions = {
         from: `"${name}" <${process.env.GMAIL_USER}>`,
@@ -97,9 +85,17 @@ export async function sendEmail(formData: FormData) {
     try {
         await transporter.sendMail(mailOptions)
         console.log('Email sent successfully')
-        return { success: true, message: 'Email sent successfully' }
+        return {
+            success: true,
+            message: 'Email sent successfully',
+            remainingAttempts: remainingAttempts - 1
+        }
     } catch (error) {
         console.error('Error sending email:', error)
-        return { success: false, message: 'Failed to send email. Please try again later.' }
+        return {
+            success: false,
+            message: 'Failed to send email. Please try again later.',
+            remainingAttempts
+        }
     }
 }
