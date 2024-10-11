@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { sendEmail } from "@/utils/mail"
+import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 
@@ -110,7 +111,14 @@ export default function Contact() {
                     />
                 </div>
                 <Button type="submit" className="w-full" disabled={isPending}>
-                    {isPending ? 'Sending...' : '送信する'}
+                    {isPending ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            送信中...
+                        </>
+                    ) : (
+                        '送信する'
+                    )}
                 </Button>
             </form>
         </div>
