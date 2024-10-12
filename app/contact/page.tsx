@@ -110,11 +110,12 @@ export default function Contact() {
                         rows={6}
                     />
                 </div>
-                <Button type="submit" className="w-24 bg-gray-200 hover:bg-sky-600 hover:text-white flex justify-center mx-auto" disabled={isPending}>
+                <Button type="submit" className="w-32 bg-gray-200 hover:bg-sky-600 hover:text-white flex justify-center mx-auto" disabled={isPending}>
                     {isPending ? (
-                        <>
+                        <><div className="text-black flex">
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             送信中...
+                        </div>
                         </>
                     ) : (
                         '送信する'
