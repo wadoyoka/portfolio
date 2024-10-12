@@ -61,7 +61,7 @@ export default function Contact() {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8 min-h-[80vh]">
+        <div className="container mx-auto px-4 py-8 min-h-[80vh] max-w-7xl">
             <h1 className="text-4xl font-bold mb-6">Contact</h1>
             <p className="mb-6">
                 ご覧いただきありがとうございます！質問やフィードバック、仕事の依頼など、お気軽にご連絡ください。
@@ -110,7 +110,7 @@ export default function Contact() {
                         rows={6}
                     />
                 </div>
-                <Button type="submit" className="w-full" disabled={isPending}>
+                <Button type="submit" className="w-24 bg-gray-200 hover:bg-sky-600 hover:text-white flex justify-center mx-auto" disabled={isPending}>
                     {isPending ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

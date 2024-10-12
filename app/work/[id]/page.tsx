@@ -1,7 +1,7 @@
 import TagBadge from "@/components/elements/TagBadge/TagBadge"
 import About from "@/components/layouts/About/About"
 import styles from "@/components/layouts/Article/Article.module.scss"
-import { MokuziLiist } from '@/components/layouts/Mokuzi/Mokuzi'
+import { TableOfContents } from '@/components/layouts/TableOfContents/TableOfContents'
 import { renderToc } from '@/libs/render-toc'
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
 import { format, isValid, parseISO } from 'date-fns'
@@ -44,8 +44,9 @@ function formatDate(dateString: string | undefined): string {
     return isValid(date) ? format(date, 'yyyy/MM/dd') : 'Invalid Date';
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
-    const work = await getWork(params.id);
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+    const resolvedParams = await params;
+    const work = await getWork(resolvedParams.id);
 
     if (!work) {
         notFound();
@@ -87,7 +88,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                             制作期間: {startDate} ~ {endDate}
                         </p>
                         <p className="text-xl mb-8">{work.summary}</p>
-                        <MokuziLiist toc={toc} />
+                        <TableOfContents toc={toc} />
                         <div className={`${styles.post} prose max-w-none`}>
                             {parse(work.body)}
                         </div>

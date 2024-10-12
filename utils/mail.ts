@@ -40,10 +40,26 @@ transporter.verify((error) => {
 
 export async function sendEmail(formData: FormData) {
     // Create a mock NextRequest object
+    const headersList = await headers()
     const mockRequest = {
-        headers: headers(),
-        ip: headers().get('x-forwarded-for') || 'unknown',
-    } as NextRequest
+        headers: {
+            get: (name: string) => headersList.get(name),
+            has: (name: string) => headersList.has(name),
+            entries: () => headersList.entries(),
+            keys: () => headersList.keys(),
+            values: () => headersList.values(),
+        },
+        ip: headersList.get('x-forwarded-for') || 'unknown',
+        nextUrl: new URL('http://localhost'), // Dummy URL
+        geo: {},
+        cookies: {
+            get: () => undefined,
+            getAll: () => [],
+            has: () => false,
+            set: () => {},
+            delete: () => {},
+        },
+    } as unknown as NextRequest
 
     // Check email rate limit
     const { allowed, message: rateMessage, remainingAttempts } = await checkRateLimitAction(mockRequest, 'email')

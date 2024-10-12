@@ -1,23 +1,32 @@
 import TagBadge from "@/components/elements/TagBadge/TagBadge"
 import About from "@/components/layouts/About/About"
-import { MokuziLiist } from '@/components/layouts/Mokuzi/Mokuzi'
+import { TableOfContents } from '@/components/layouts/TableOfContents/TableOfContents'
 import { renderToc } from '@/libs/render-toc'
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
-import { format, isValid, parseISO } from 'date-fns'
+import { formatDate } from '@/utils/dateUtils'
 import parse from 'html-react-parser'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
 interface Tag {
     id: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    revisedAt: string;
     tag: string;
 }
 
 interface BlogPost {
     id: string;
-    title: string;
+    createdAt: string;
+    updatedAt: string;
     publishedAt: string;
-    updatedAt?: string;
+    revisedAt: string;
+    title: string;
+    createStartDate: string;
+    createEndDate: string;
     summary: string;
     body: string;
     thumbnail: {
@@ -25,30 +34,64 @@ interface BlogPost {
         height: number;
         width: number;
     };
+    isThumbnailTitle: boolean;
+    category: string[];
     tags: Tag[];
 }
 
-async function getBlogPost(id: string): Promise<BlogPost | null> {
-    return getContentById<BlogPost>(process.env.SERVICE_DOMAIN as string, id);
+const SERVICE_DOMAIN = process.env.SERVICE_DOMAIN as string;
+if (!SERVICE_DOMAIN) {
+    throw new Error('SERVICE_DOMAIN is not defined in environment variables');
+}
+
+async function getBlogPost(id: string): Promise<BlogPost> {
+    try {
+        const post = await getContentById<BlogPost>(SERVICE_DOMAIN, id);
+        if (!post) {
+            throw new Error(`Blog post with id ${id} not found`);
+        }
+        return post;
+    } catch (error) {
+        console.error('Error fetching blog post:', error);
+        notFound();
+    }
 }
 
 export async function generateStaticParams() {
-    const ids = await getAllContentIds(process.env.SERVICE_DOMAIN as string, 'blog');
-    return ids.map((id) => ({ id }));
-}
-
-function formatDate(dateString: string | undefined): string {
-    if (!dateString) return 'Not specified';
-    const date = parseISO(dateString);
-    return isValid(date) ? format(date, 'yyyy/MM/dd') : 'Invalid Date';
-}
-
-export default async function BlogPostPage({ params }: { params: { id: string } }) {
-    const post = await getBlogPost(params.id);
-
-    if (!post) {
-        notFound();
+    try {
+        const ids = await getAllContentIds(SERVICE_DOMAIN, 'blog');
+        return ids.map((id) => ({ id }));
+    } catch (error) {
+        console.error('Error generating static params:', error);
+        return [];
     }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const resolvedParams = await params;
+    const post = await getBlogPost(resolvedParams.id);
+
+    return {
+        title: post.title,
+        description: post.summary,
+        openGraph: {
+            title: post.title,
+            description: post.summary,
+            images: [{ url: post.thumbnail.url }],
+            type: 'article',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description: post.summary,
+            images: [post.thumbnail.url],
+        },
+    };
+}
+
+export default async function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
+    const resolvedParams = await params;
+    const post = await getBlogPost(resolvedParams.id);
 
     const publishedDate = formatDate(post.publishedAt);
     const updatedDate = formatDate(post.updatedAt);
@@ -56,39 +99,41 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
     const toc = renderToc(post.body);
 
     return (
-        <>
-            <main>
-                <div className="container mx-auto px-4 py-8 max-w-7xl mb-32">
-                    <article>
-                        <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-                        <div className="mb-4 flex flex-wrap gap-2">
-                            {post.tags.map((tag) => (
-                                <TagBadge key={tag.id} tag={tag} />
-                            ))}
-                        </div>
-                        <div className="mb-8">
-                            <Image
-                                src={post.thumbnail.url}
-                                alt={post.title}
-                                width={post.thumbnail.width}
-                                height={post.thumbnail.height}
-                                className="w-full h-auto rounded-lg"
-                                priority
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <p className="text-gray-600">Published: {publishedDate}</p>
-                            {post.updatedAt && <p className="text-gray-600">Last updated: {updatedDate}</p>}
-                        </div>
-                        <p className="text-xl mb-8">{post.summary}</p>
-                        <MokuziLiist toc={toc} />
-                        <div className="prose max-w-none">
-                            {parse(post.body)}
-                        </div>
-                    </article>
-                </div>
-                <About />
-            </main>
-        </>
+        <main>
+            <div className="container mx-auto px-4 py-8 max-w-7xl mb-32">
+                <article itemScope itemType="http://schema.org/BlogPosting">
+                    <h1 className="text-4xl font-bold mb-4" itemProp="headline">{post.title}</h1>
+                    <div className="mb-4 flex flex-wrap gap-2">
+                        {post.tags.map((tag) => (
+                            <TagBadge key={tag.id} tag={tag} />
+                        ))}
+                    </div>
+                    <div className="mb-8">
+                        <Image
+                            src={post.thumbnail.url}
+                            alt={post.title}
+                            width={post.thumbnail.width}
+                            height={post.thumbnail.height}
+                            className="w-full h-auto rounded-lg"
+                            priority
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            itemProp="image"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <p className="text-gray-600">Published: <time itemProp="datePublished" dateTime={post.publishedAt}>{publishedDate}</time></p>
+                        <p className="text-gray-600">Last updated: <time itemProp="dateModified" dateTime={post.updatedAt}>{updatedDate}</time></p>
+                    </div>
+                    <p className="text-xl mb-8" itemProp="description">{post.summary}</p>
+                    <nav aria-label="Table of Contents">
+                        <TableOfContents toc={toc} />
+                    </nav>
+                    <div className="prose max-w-none" itemProp="articleBody">
+                        {parse(post.body)}
+                    </div>
+                </article>
+            </div>
+            <About />
+        </main>
     );
 }

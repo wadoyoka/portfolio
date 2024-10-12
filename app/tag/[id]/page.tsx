@@ -37,9 +37,10 @@ export async function generateStaticParams() {
     return tagIds.map((id) => ({ id }));
 }
 
-export default async function TagPage({ params }: { params: { id: string } }) {
-    const { works, blogPosts } = await getContentByTag(params.id);
-    const tag = await getTagById(params.id);
+export default async function TagPage({ params }: { params: Promise<{ id: string }> }) {
+    const resolvedParams = await params;
+    const { works, blogPosts } = await getContentByTag(resolvedParams.id);
+    const tag = await getTagById(resolvedParams.id);
 
     if (!tag) {
         notFound();

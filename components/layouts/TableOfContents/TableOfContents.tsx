@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './mokuzi.module.scss';
+import styles from './TableOfContents.module.scss';
 
 interface TocItem {
     id: string;
@@ -11,7 +11,7 @@ interface TableOfContentsProps {
     toc: TocItem[];
 }
 
-export const MokuziLiist: React.FC<TableOfContentsProps> = ({ toc }) => {
+export const TableOfContents: React.FC<TableOfContentsProps> = ({ toc }) => {
     const result: JSX.Element[] = [];
     let h2List: JSX.Element[] = [];
 

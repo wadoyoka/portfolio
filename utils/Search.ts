@@ -1,32 +1,54 @@
 'use server'
 
+import { client } from '@/libs/client'
 import { headers } from 'next/headers'
 import { checkRateLimitAction } from './ratelimit'
 
-export async function performSearch(prevState: any, formData: FormData) {
-    const searchTerm = formData.get('searchTerm') as string
+export type SearchResult = {
+    id: string
+    title: string
+    summary: string
+    category: string[]
+    publishedAt: string;
+    tags: { id: string; tag: string }[]
+    thumbnail: {
+        url: string
+        height: number
+        width: number
+    }
+}
 
-    // Create a mock NextRequest object
+export async function performSearch(query: string): Promise<{ success: boolean; message: string; remainingAttempts: number; results: SearchResult[] }> {
     const mockRequest = {
         headers: headers(),
-        ip: headers().get('x-forwarded-for') || 'unknown',
-    } as any // Type assertion to avoid TypeScript errors
+        ip: (await headers()).get('x-forwarded-for') || 'unknown',
+    } as any
 
     const { allowed, message, remainingAttempts } = await checkRateLimitAction(mockRequest, 'search')
 
     if (!allowed) {
-        return { success: false, message, remainingAttempts }
+        return { success: false, message, remainingAttempts, results: [] }
     }
+    console.log(query);
+    try {
+        const searchResults = await client.getAllContents({
+            endpoint: 'atsushi-portfolio',
+            queries: { q: query },
+        })
 
-    // Perform your search logic here
-    console.log('Searching for:', searchTerm)
-
-    // For demonstration purposes, we're just returning the search term
-    // In a real application, you would perform the actual search here
-    return {
-        success: true,
-        message: `Searched for: ${searchTerm}`,
-        remainingAttempts,
-        results: [`Result 1 for ${searchTerm}`, `Result 2 for ${searchTerm}`, `Result 3 for ${searchTerm}`]
+        return {
+            success: true,
+            message: `Searched for: ${query}`,
+            remainingAttempts,
+            results: searchResults,
+        }
+    } catch (error) {
+        console.error('Search error:', error)
+        return {
+            success: false,
+            message: 'An error occurred while searching',
+            remainingAttempts,
+            results: [],
+        }
     }
 }

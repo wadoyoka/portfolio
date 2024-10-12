@@ -34,7 +34,7 @@ async function getClientIP(req: NextRequest): Promise<string> {
         return realIP.trim()
     }
 
-    return req.ip ?? 'unknown'
+    return forwardedFor ?? 'unknown'
 }
 
 function hashIP(ip: string): string {
