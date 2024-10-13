@@ -3,8 +3,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { performSearch, SearchResult } from '@/utils/Search';
 import { Suspense } from 'react';
 
-export const experimental_ppr = true;
-
 async function SearchResults({ query }: { query: string }) {
     const results = await performSearch(query)
 
