@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
     const session = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
 
     // Define paths that should be accessible without authentication
-    const publicPaths = ['/login', '/register', '/forgot-password']
+    const publicPaths = ['/login']
 
     // Check if the current path is in the public paths
     const isPublicPath = publicPaths.some(path => request.nextUrl.pathname.startsWith(path))
@@ -19,9 +19,9 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(loginUrl)
     }
 
-    if (session && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register')) {
+    if (session && (request.nextUrl.pathname === '/login')) {
         // Redirect to home page if user is already logged in and trying to access login or register page
-        return NextResponse.redirect(new URL('/', request.url))
+        return NextResponse.redirect(new URL(process.env.NEXT_PUBLIC_SITE_URL as string, request.url))
     }
 
     return NextResponse.next()

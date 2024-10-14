@@ -21,12 +21,14 @@ export default async function RootLayout({
   return (
     <html lang="ja">
       <body className={`${inter.className} flex flex-col min-h-screen`}>
-        <Header />
-        <main className="flex-grow">
-          <Providers>{children}</Providers>
-        </main>
-        <Footer />
-        <Toaster />
+        <Providers>
+          <Header />
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Footer />
+          <Toaster />
+        </Providers>
       </body>
     </html>
   )
