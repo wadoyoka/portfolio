@@ -1,9 +1,10 @@
-import Footer from '@/components/layouts/Footer/Footer'
-import Header from '@/components/layouts/Header/Header'
-import { Toaster } from '@/components/ui/toaster'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
+import Footer from '@/components/layouts/Footer/Footer';
+import Header from '@/components/layouts/Header/Header';
+import { Toaster } from '@/components/ui/toaster';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   description: 'Enomoto Atsushi\'s personal portfolio website',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
@@ -22,7 +23,7 @@ export default function RootLayout({
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         <Header />
         <main className="flex-grow">
-          {children}
+          <Providers>{children}</Providers>
         </main>
         <Footer />
         <Toaster />
