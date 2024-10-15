@@ -101,9 +101,11 @@ const authOptions: NextAuthOptions = {
     },
     session: {
         strategy: "jwt",
+        maxAge: 60,
     },
 };
 
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
+

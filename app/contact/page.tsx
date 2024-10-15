@@ -1,11 +1,10 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
+import SubmitButton from "@/components/elements/SubmitButton/SubmitButton"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { sendEmail } from "@/utils/mail"
-import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 
@@ -18,6 +17,13 @@ export default function Contact() {
         email: '',
         message: ''
     })
+
+    const submitButtonContent = {
+        preText: "送信",
+        postText: "送信中",
+        ispending: isPending
+    }
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
@@ -110,17 +116,7 @@ export default function Contact() {
                         rows={6}
                     />
                 </div>
-                <Button type="submit" className="w-32 bg-gray-200 hover:bg-sky-600 hover:text-white flex justify-center mx-auto" disabled={isPending}>
-                    {isPending ? (
-                        <><div className="text-black flex">
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            送信中...
-                        </div>
-                        </>
-                    ) : (
-                        '送信する'
-                    )}
-                </Button>
+                <SubmitButton submitButtonContent={submitButtonContent}></SubmitButton>
             </form>
         </div>
     )
