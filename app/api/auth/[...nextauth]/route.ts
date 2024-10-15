@@ -1,7 +1,7 @@
 import DataFetcher from '@/lib/DateFether';
+import { CryptoUtils } from '@/utils/crypto-utils';
 import NextAuth, { DefaultSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
 declare module "next-auth" {
     interface Session extends DefaultSession {
         user: {
@@ -46,16 +46,24 @@ const authOptions: NextAuthOptions = {
                 }
 
                 try {
-                    const users = await DataFetcher(credentials.username) as FirestoreUser[];
+                    const hashedUserName = await CryptoUtils.base64Encode(credentials.username);
+                    console.log(hashedUserName)
+
+                    const users = await DataFetcher(hashedUserName) as FirestoreUser[];
                     console.log(users);
                     const user = users[0]
-
                     if (!user) {
                         console.log("User not found");
                         return null;
                     }
 
-                    if (credentials.password !== user.PassWord) {
+                    const base64EncodedInputPass = await CryptoUtils.base64Encode(credentials.password);
+                    const secretUnion = base64EncodedInputPass + (process.env.SECRET_LOGIN_PASS_KEY as string);
+                    const sha256HashedInputPass = await CryptoUtils.sha256Hash(secretUnion);
+                    const ispass = await CryptoUtils.comparePassword(sha256HashedInputPass, user.PassWord);
+                    console.log('ispass\t'+ispass)
+
+                    if (!ispass) {
                         console.log("Invalid password");
                         return null;
                     }
