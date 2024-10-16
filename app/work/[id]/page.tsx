@@ -6,6 +6,7 @@ import { renderToc } from '@/libs/render-toc'
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
 import { format, isValid, parseISO } from 'date-fns'
 import parse from 'html-react-parser'
+import { Metadata } from "next"
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
@@ -29,11 +30,22 @@ interface WorkItem {
     tags: Tag[];
 }
 
-async function getWork(id: string): Promise<WorkItem | null> {
-    return getContentById<WorkItem>(process.env.SERVICE_DOMAIN as string, id);
+const SERVICE_DOMAIN = process.env.SERVICE_DOMAIN as string;
+
+async function getWork(id: string): Promise<WorkItem> {
+    try {
+        const post = await getContentById<WorkItem>(SERVICE_DOMAIN, id);
+        if (!post) {
+            throw new Error(`Work post with id ${id} not found`);
+        }
+        return post;
+    } catch (error) {
+        console.error('Error fetching work post:', error);
+        notFound();
+    }
 }
 
-export async function generateStaticParams() {
+async function generateStaticParams() {
     const ids = await getAllContentIds(process.env.SERVICE_DOMAIN as string, 'works');
     return ids.map((id) => ({ id }));
 }
@@ -99,3 +111,27 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </>
     );
 }
+
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+    const post = await getWork(params.id);
+
+    return {
+        title: post.title,
+        description: post.summary,
+        openGraph: {
+            title: post.title,
+            description: post.summary,
+            images: [{ url: post.thumbnail.url }],
+            type: 'article',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description: post.summary,
+            images: [post.thumbnail.url],
+        },
+    };
+}
+
+export { generateStaticParams }

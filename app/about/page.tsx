@@ -1,6 +1,17 @@
+import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaGithub, FaTwitter } from 'react-icons/fa'
+
+//後で確認
+export const metadata: Metadata = {
+    title: 'About',
+    description: 'Learn more about our amazing company and what we do',
+    openGraph: {
+        title: 'About My Amazing Site',
+        description: 'Learn more about our amazing company and what we do',
+    },
+}
 
 export default function About() {
     return (
