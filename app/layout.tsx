@@ -1,5 +1,5 @@
-import Footer from '@/components/layouts/Footer/Footer';
-import Header from '@/components/layouts/Header/Header';
+import FooterCreator from '@/components/layouts/Footer/FooterCreater';
+import HeaderCreator from '@/components/layouts/Header/HeaderCreater';
 import { Toaster } from '@/components/ui/toaster';
 import BreadcrumbJsonLd from '@/utils/BreadcrumbJsonLd';
 import { Metadata } from 'next';
@@ -11,18 +11,18 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: {
-    default: 'My Amazing Site',
-    template: '%s | My Amazing Site',
+    default: 'Atsushi Portfolio',
+    template: '%s | Atsushi Portofolio',
   },
-  description: 'Welcome to my amazing site, full of incredible content',
+  description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
   openGraph: {
-    title: 'My Amazing Site',
-    description: 'Welcome to my amazing site, full of incredible content',
-    url: 'https://myamazingsite.com',
-    siteName: 'My Amazing Site',
+    title: 'Atsushi Portfolio',
+    description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL as string}/ogp/`,//後で確認
+    siteName: 'Atsushi Portfolio',
     images: [
       {
-        url: 'https://myamazingsite.com/og-image.jpg',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL as string}/og-image.jpg`,
         width: 1200,
         height: 630,
       },
@@ -47,7 +47,18 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
   },
   icons: {
-    shortcut: '/favicon.ico',
+    icon: [
+      { url: 'favicons/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: 'favicons/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: 'favicons/favicon.ico',
+    apple: [
+      { url: 'favicons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: 'favicons/site.webmanifest',
+  appleWebApp: {
+    title: 'Atsushi',
   },
 }
 
@@ -62,11 +73,11 @@ export default async function RootLayout({
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         <BreadcrumbJsonLd />
         <Providers>
-          <Header />
+          <HeaderCreator />
           <main className="flex-grow">
             {children}
           </main>
-          <Footer />
+          <FooterCreator />
           <Toaster />
         </Providers>
       </body>

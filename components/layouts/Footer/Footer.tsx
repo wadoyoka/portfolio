@@ -9,7 +9,7 @@ export default function Footer() {
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className="flex items-center mb-4 md:mb-0">
                         <Image
-                            src="/logo.png"
+                            src="/logo_white.png"
                             alt="Enomoto Atsushi Logo"
                             width={40}
                             height={40}
