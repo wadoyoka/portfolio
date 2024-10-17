@@ -8,16 +8,26 @@ interface ContentItem {
 
 export async function getAllContentIds(endpoint: string, category: string): Promise<string[]> {
     try {
-        if(category === ''){
+        if (category === '') {
             const data = await client.getAllContents({
+                customRequestInit: {
+                    next: {
+                        tags: ['all'],
+                    },
+                },
                 endpoint: endpoint,
                 queries: {
                     fields: 'id'
                 }
             });
             return data.map((content: ContentItem) => content.id);
-        }else{
+        } else {
             const data = await client.getAllContents({
+                customRequestInit: {
+                    next: {
+                        tags: ['all'],
+                    },
+                },
                 endpoint: endpoint,
                 queries: {
                     fields: 'id',
@@ -35,6 +45,11 @@ export async function getAllContentIds(endpoint: string, category: string): Prom
 export async function getContentById<T>(endpoint: string, id: string): Promise<T | null> {
     try {
         const data = await client.get({
+            customRequestInit: {
+                next: {
+                    tags: ['id'],
+                },
+            },
             endpoint: endpoint,
             contentId: id,
         });
@@ -48,6 +63,11 @@ export async function getContentById<T>(endpoint: string, id: string): Promise<T
 export async function getAllContents<T>(endpoint: string, queries?: object): Promise<T[]> {
     try {
         const data = await client.getAllContents({
+            customRequestInit: {
+                next: {
+                    tags: [endpoint],
+                },
+            },
             endpoint: endpoint,
             queries: queries,
         });

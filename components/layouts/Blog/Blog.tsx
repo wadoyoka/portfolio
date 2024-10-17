@@ -33,7 +33,7 @@ export default function Blog({ blogPosts }: BlogProps) {
                             key={post.id}
                             id={post.id}
                             title={post.title}
-                            thumbnailUrl={post.thumbnail.url}
+                            thumbnailUrl={`/ogp/blog/${post.id}.webp`}
                             tags={post.tags}
                             linkPrefix="/blog/"
                             publishedAt={post.publishedAt}

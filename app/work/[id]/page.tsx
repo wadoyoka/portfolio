@@ -3,6 +3,7 @@ import About from "@/components/layouts/About/About"
 import styles from "@/components/layouts/Article/Article.module.scss"
 import { TableOfContents } from '@/components/layouts/TableOfContents/TableOfContents'
 import { renderToc } from '@/libs/render-toc'
+import createOgp from '@/utils/ogpUtils'
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
 import { format, isValid, parseISO } from 'date-fns'
 import parse from 'html-react-parser'
@@ -27,6 +28,8 @@ interface WorkItem {
         height: number;
         width: number;
     };
+    isThumbnailTitle: boolean;
+    thunmbnailTitle: string;
     tags: Tag[];
 }
 
@@ -37,6 +40,23 @@ async function getWork(id: string): Promise<WorkItem> {
         const post = await getContentById<WorkItem>(SERVICE_DOMAIN, id);
         if (!post) {
             throw new Error(`Work post with id ${id} not found`);
+        }
+        if (post.isThumbnailTitle) {
+            await createOgp({
+                dynamic: `${id}`,
+                imageUrl: `${post.thumbnail.url}`,
+                exportPlace: "work",
+                text: `${post.thunmbnailTitle}`,
+                compressionOptions: { quality: 85, lossless: false, effort: 6 }
+            });
+        } else {
+            await createOgp({
+                dynamic: `${id}`,
+                imageUrl: `${post.thumbnail.url}`,
+                exportPlace: "work",
+                text: "",
+                compressionOptions: { quality: 85, lossless: false, effort: 6 }
+            });
         }
         return post;
     } catch (error) {
@@ -82,7 +102,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         </div>
                         <div className="mb-8">
                             <Image
-                                src={work.thumbnail.url}
+                                src={`/ogp/work/${work.id}.webp`}
                                 alt={work.title}
                                 width={work.thumbnail.width}
                                 height={work.thumbnail.height}
@@ -135,3 +155,4 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export { generateStaticParams }
+

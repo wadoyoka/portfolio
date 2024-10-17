@@ -69,7 +69,7 @@ export default async function TagPage({ params }: { params: Promise<{ id: string
                                             key={work.id}
                                             id={work.id}
                                             title={work.title}
-                                            thumbnailUrl={work.thumbnail.url}
+                                            thumbnailUrl={`/ogp/work/${work.id}.webp`}
                                             tags={work.tags}
                                             linkPrefix="/work/"
                                         />
@@ -87,7 +87,7 @@ export default async function TagPage({ params }: { params: Promise<{ id: string
                                             key={post.id}
                                             id={post.id}
                                             title={post.title}
-                                            thumbnailUrl={post.thumbnail.url}
+                                            thumbnailUrl={`/ogp/blog/${post.id}.webp`}
                                             tags={post.tags}
                                             linkPrefix="/blog/"
                                             publishedAt={post.publishedAt}

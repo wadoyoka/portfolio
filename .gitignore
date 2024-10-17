@@ -36,3 +36,8 @@ yarn-error.log*
 next-env.d.ts
 
 firebase-test-serviceAccount.json
+
+public/ogp/blog/*
+!public/ogp/blog/.gitkeep
+public/ogp/work/*
+!public/ogp/work/.gitkeep

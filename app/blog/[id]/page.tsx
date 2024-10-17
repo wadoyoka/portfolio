@@ -4,6 +4,7 @@ import { TableOfContents } from '@/components/layouts/TableOfContents/TableOfCon
 import { renderToc } from '@/libs/render-toc'
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
 import { formatDate } from '@/utils/dateUtils'
+import createOgp from "@/utils/ogpUtils"
 import parse from 'html-react-parser'
 import { Metadata } from 'next'
 import Image from 'next/image'
@@ -35,6 +36,7 @@ interface BlogPost {
         width: number;
     };
     isThumbnailTitle: boolean;
+    thunmbnailTitle: string;
     category: string[];
     tags: Tag[];
 }
@@ -49,6 +51,24 @@ async function getBlogPost(id: string): Promise<BlogPost> {
         const post = await getContentById<BlogPost>(SERVICE_DOMAIN, id);
         if (!post) {
             throw new Error(`Blog post with id ${id} not found`);
+        }
+
+        if (post.isThumbnailTitle) {
+            await createOgp({
+                dynamic: `${id}`,
+                imageUrl: `${post.thumbnail.url}`,
+                exportPlace: "blog",
+                text: `${post.thunmbnailTitle}`,
+                compressionOptions: { quality: 85, lossless: false, effort: 6 }
+            });
+        } else {
+            await createOgp({
+                dynamic: `${id}`,
+                imageUrl: `${post.thumbnail.url}`,
+                exportPlace: "blog",
+                text: "",
+                compressionOptions: { quality: 85, lossless: false, effort: 6 }
+            });
         }
         return post;
     } catch (error) {
@@ -110,7 +130,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
                     </div>
                     <div className="mb-8">
                         <Image
-                            src={post.thumbnail.url}
+                            src={`/ogp/blog/${post.id}.webp`}
                             alt={post.title}
                             width={post.thumbnail.width}
                             height={post.thumbnail.height}

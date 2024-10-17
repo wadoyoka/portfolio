@@ -31,7 +31,7 @@ export default function Works({ works }: WorksProps) {
                             key={work.id}
                             id={work.id}
                             title={work.title}
-                            thumbnailUrl={work.thumbnail.url}
+                            thumbnailUrl={`/ogp/work/${work.id}.webp`}
                             tags={work.tags}
                         />
                     ))}
