@@ -16,13 +16,16 @@ export const metadata: Metadata = {
   },
   description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
   openGraph: {
-    title: 'Atsushi Portfolio',
+    title: {
+      default: 'Atsushi Portfolio',
+      template: '%s | Atsushi Portofolio',
+    },
     description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
-    url: `${process.env.NEXT_PUBLIC_SITE_URL as string}/ogp/`,//後で確認
+    url: `${process.env.NEXT_PUBLIC_SITE_URL as string}`,//後で確認
     siteName: 'Atsushi Portfolio',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL as string}/og-image.jpg`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL as string}/og-image.webp`,
         width: 1200,
         height: 630,
       },

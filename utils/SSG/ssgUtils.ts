@@ -12,7 +12,7 @@ export async function getAllContentIds(endpoint: string, category: string): Prom
             const data = await client.getAllContents({
                 customRequestInit: {
                     next: {
-                        tags: ['all'],
+                        tags: [endpoint],
                     },
                 },
                 endpoint: endpoint,
@@ -25,7 +25,7 @@ export async function getAllContentIds(endpoint: string, category: string): Prom
             const data = await client.getAllContents({
                 customRequestInit: {
                     next: {
-                        tags: ['all'],
+                        tags: [endpoint],
                     },
                 },
                 endpoint: endpoint,
@@ -47,7 +47,7 @@ export async function getContentById<T>(endpoint: string, id: string): Promise<T
         const data = await client.get({
             customRequestInit: {
                 next: {
-                    tags: ['id'],
+                    tags: [endpoint],
                 },
             },
             endpoint: endpoint,

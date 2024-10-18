@@ -20,6 +20,11 @@ interface WorkItem {
 async function getWorks(): Promise<WorkItem[]> {
   try {
     const data = await client.getAllContents({
+      customRequestInit: {
+        next: {
+          tags: [process.env.SERVICE_DOMAIN as string],
+        },
+      },
       endpoint: process.env.SERVICE_DOMAIN as string,
       queries: { filters: 'category[contains]works' },
     });

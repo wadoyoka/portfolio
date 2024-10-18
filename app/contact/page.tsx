@@ -5,8 +5,20 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { sendEmail } from "@/utils/mail"
+import { Metadata } from "next"
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
+
+//後で確認
+export const metadata: Metadata = {
+    title: 'Contact',
+    description: 'Enomoto Atsushiのブログを掲載したページです。',
+    openGraph: {
+        title: 'Contact',
+        description: 'Enomoto Atsushiのブログを掲載したページです。',
+    },
+}
+
 
 export default function Contact() {
     const router = useRouter()

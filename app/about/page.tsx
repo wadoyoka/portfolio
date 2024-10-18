@@ -6,10 +6,10 @@ import { FaGithub, FaTwitter } from 'react-icons/fa'
 //後で確認
 export const metadata: Metadata = {
     title: 'About',
-    description: 'Learn more about our amazing company and what we do',
+    description: 'Enomoto Atsushiと当ポートフォリオについて説明したページです。',
     openGraph: {
-        title: 'About My Amazing Site',
-        description: 'Learn more about our amazing company and what we do',
+        title: 'About',
+        description: 'Enomoto Atsushiと当ポートフォリオについて説明したページです。',
     },
 }
 

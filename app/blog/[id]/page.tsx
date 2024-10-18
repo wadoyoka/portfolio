@@ -1,5 +1,6 @@
 import TagBadge from "@/components/elements/TagBadge/TagBadge"
 import About from "@/components/layouts/About/About"
+import styles from "@/components/layouts/Article/Article.module.scss"
 import { TableOfContents } from '@/components/layouts/TableOfContents/TableOfContents'
 import { renderToc } from '@/libs/render-toc'
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
@@ -9,6 +10,7 @@ import parse from 'html-react-parser'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+
 
 interface Tag {
     id: string;
@@ -52,24 +54,6 @@ async function getBlogPost(id: string): Promise<BlogPost> {
         if (!post) {
             throw new Error(`Blog post with id ${id} not found`);
         }
-
-        if (post.isThumbnailTitle) {
-            await createOgp({
-                dynamic: `${id}`,
-                imageUrl: `${post.thumbnail.url}`,
-                exportPlace: "blog",
-                text: `${post.thunmbnailTitle}`,
-                compressionOptions: { quality: 85, lossless: false, effort: 6 }
-            });
-        } else {
-            await createOgp({
-                dynamic: `${id}`,
-                imageUrl: `${post.thumbnail.url}`,
-                exportPlace: "blog",
-                text: "",
-                compressionOptions: { quality: 85, lossless: false, effort: 6 }
-            });
-        }
         return post;
     } catch (error) {
         console.error('Error fetching blog post:', error);
@@ -97,14 +81,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         openGraph: {
             title: post.title,
             description: post.summary,
-            images: [{ url: post.thumbnail.url }],
+            images: [{ url: `/ogp/blog/${post.id}.webp` }],
             type: 'article',
         },
         twitter: {
             card: 'summary_large_image',
             title: post.title,
             description: post.summary,
-            images: [post.thumbnail.url],
+            images: [`/ogp/blog/${post.id}.webp`],
         },
     };
 }
@@ -112,6 +96,24 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
     const post = await getBlogPost(resolvedParams.id);
+
+    if (post.isThumbnailTitle) {
+        await createOgp({
+            dynamic: `${post.id}`,
+            imageUrl: `${post.thumbnail.url}`,
+            exportPlace: "blog",
+            text: `${post.thunmbnailTitle}`,
+            compressionOptions: { quality: 85, lossless: false, effort: 6 }
+        });
+    } else {
+        await createOgp({
+            dynamic: `${post.id}`,
+            imageUrl: `${post.thumbnail.url}`,
+            exportPlace: "blog",
+            text: "",
+            compressionOptions: { quality: 85, lossless: false, effort: 6 }
+        });
+    }
 
     const publishedDate = formatDate(post.publishedAt);
     const updatedDate = formatDate(post.updatedAt);
@@ -148,7 +150,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
                     <nav aria-label="Table of Contents">
                         <TableOfContents toc={toc} />
                     </nav>
-                    <div className="prose max-w-none" itemProp="articleBody">
+                    <div className={`${styles.post} prose max-w-none`} itemProp="articleBody">
                         {parse(post.body)}
                     </div>
                 </article>

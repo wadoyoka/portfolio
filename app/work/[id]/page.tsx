@@ -3,7 +3,7 @@ import About from "@/components/layouts/About/About"
 import styles from "@/components/layouts/Article/Article.module.scss"
 import { TableOfContents } from '@/components/layouts/TableOfContents/TableOfContents'
 import { renderToc } from '@/libs/render-toc'
-import createOgp from '@/utils/ogpUtils'
+import createOgp from "@/utils/ogpUtils"
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
 import { format, isValid, parseISO } from 'date-fns'
 import parse from 'html-react-parser'
@@ -41,23 +41,6 @@ async function getWork(id: string): Promise<WorkItem> {
         if (!post) {
             throw new Error(`Work post with id ${id} not found`);
         }
-        if (post.isThumbnailTitle) {
-            await createOgp({
-                dynamic: `${id}`,
-                imageUrl: `${post.thumbnail.url}`,
-                exportPlace: "work",
-                text: `${post.thunmbnailTitle}`,
-                compressionOptions: { quality: 85, lossless: false, effort: 6 }
-            });
-        } else {
-            await createOgp({
-                dynamic: `${id}`,
-                imageUrl: `${post.thumbnail.url}`,
-                exportPlace: "work",
-                text: "",
-                compressionOptions: { quality: 85, lossless: false, effort: 6 }
-            });
-        }
         return post;
     } catch (error) {
         console.error('Error fetching work post:', error);
@@ -82,6 +65,24 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     if (!work) {
         notFound();
+    }
+
+    if (work.isThumbnailTitle) {
+        await createOgp({
+            dynamic: `${work.id}`,
+            imageUrl: `${work.thumbnail.url}`,
+            exportPlace: "work",
+            text: `${work.thunmbnailTitle}`,
+            compressionOptions: { quality: 85, lossless: false, effort: 6 }
+        });
+    } else {
+        await createOgp({
+            dynamic: `${work.id}`,
+            imageUrl: `${work.thumbnail.url}`,
+            exportPlace: "work",
+            text: "",
+            compressionOptions: { quality: 85, lossless: false, effort: 6 }
+        });
     }
 
     const startDate = formatDate(work.createStartDate);

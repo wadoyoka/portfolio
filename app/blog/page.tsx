@@ -1,5 +1,6 @@
 import Blog from '@/components/layouts/Blog/Blog';
 import { getAllContents } from '@/utils/SSG/ssgUtils';
+import { Metadata } from 'next';
 
 interface Tag {
     id: string;
@@ -17,6 +18,16 @@ interface BlogPost {
         width: number;
     };
     tags: Tag[];
+}
+
+//後で確認
+export const metadata: Metadata = {
+    title: 'Blog',
+    description: 'Enomoto Atsushiのブログを掲載したページです。',
+    openGraph: {
+        title: 'Blog',
+        description: 'Enomoto Atsushiのブログを掲載したページです。',
+    },
 }
 
 async function getBlogPosts(): Promise<BlogPost[]> {
