@@ -7,6 +7,7 @@ import { FaGithub, FaTwitter } from 'react-icons/fa'
 export const metadata: Metadata = {
     title: 'About',
     description: 'Enomoto Atsushiと当ポートフォリオについて説明したページです。',
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'),
     openGraph: {
         title: 'About',
         description: 'Enomoto Atsushiと当ポートフォリオについて説明したページです。',
@@ -21,6 +22,17 @@ export const metadata: Metadata = {
         ],
         locale: 'ja_JP',
         type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Atsushi Portfolio',
+        description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
+        images: [{
+            url: '/ogp/og-image.webp',
+            width: 1200,
+            height: 630,
+        },],
+        creator: '@wadoyoka',
     },
 }
 

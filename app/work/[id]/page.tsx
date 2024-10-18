@@ -140,6 +140,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     return {
         title: post.title,
         description: post.summary,
+        metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'),
         openGraph: {
             title: post.title,
             description: post.summary,
@@ -159,7 +160,12 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
             card: 'summary_large_image',
             title: post.title,
             description: post.summary,
-            images: [`/ogp/work/${post.id}.webp`],
+            images: [{
+                url: `/ogp/work/${post.id}.webp`,
+                width: 1200,
+                height: 630,
+            }],
+            creator: '@wadoyoka',
         },
     };
 }

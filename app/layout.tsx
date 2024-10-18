@@ -35,6 +35,20 @@ export const metadata: Metadata = {
     locale: 'ja_JP',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: {
+      default: 'Atsushi Portfolio',
+      template: '%s | Atsushi Portfolio',
+    },
+    description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
+    images: [{
+      url: '/ogp/og-image.webp',
+      width: 1200,
+      height: 630,
+    },],
+    creator: '@wadoyoka',
+  },
   robots: {
     index: true,
     follow: true,
@@ -45,17 +59,6 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Atsushi Portfolio',
-    description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
-    images: [{
-      url: '/ogp/og-image.webp',
-      width: 1200,
-      height: 630,
-    },],
-    creator: '@wadoyoka',
   },
   icons: {
     icon: [

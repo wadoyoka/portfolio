@@ -24,9 +24,32 @@ interface BlogPost {
 export const metadata: Metadata = {
     title: 'Blog',
     description: 'Enomoto Atsushiのブログを掲載したページです。',
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'),
     openGraph: {
         title: 'Blog',
         description: 'Enomoto Atsushiのブログを掲載したページです。',
+        url: '/blog',
+        siteName: 'Atsushi Portfolio',
+        images: [
+            {
+                url: '/ogp/og-image.webp',
+                width: 1200,
+                height: 630,
+            },
+        ],
+        locale: 'ja_JP',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Blog',
+        description: 'Enomoto Atsushiのブログを掲載したページです。',
+        images: [{
+            url: '/ogp/og-image.webp',
+            width: 1200,
+            height: 630,
+        },],
+        creator: '@wadoyoka',
     },
 }
 

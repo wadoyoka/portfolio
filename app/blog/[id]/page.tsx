@@ -78,6 +78,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     return {
         title: post.title,
         description: post.summary,
+        metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'),
         openGraph: {
             title: post.title,
             description: post.summary,
@@ -98,6 +99,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
             title: post.title,
             description: post.summary,
             images: [`/ogp/blog/${post.id}.webp`],
+            creator: '@wadoyoka',
         },
     };
 }
