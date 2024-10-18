@@ -15,7 +15,7 @@ async function SearchResults({ query }: { query: string }) {
 
     return (
         <Tabs defaultValue="work" className="w-full">
-            <TabsList>
+            <TabsList className='bg-slate-200'>
                 <TabsTrigger value="work">work {workResults.length}</TabsTrigger>
                 <TabsTrigger value="blog">Blog {blogResults.length}</TabsTrigger>
             </TabsList>
