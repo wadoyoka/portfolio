@@ -9,31 +9,32 @@ import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'] })
 
+
 export const metadata: Metadata = {
   title: {
     default: 'Atsushi Portfolio',
-    template: '%s | Atsushi Portofolio',
+    template: '%s | Atsushi Portfolio',
   },
   description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'),
   openGraph: {
     title: {
       default: 'Atsushi Portfolio',
-      template: '%s | Atsushi Portofolio',
+      template: '%s | Atsushi Portfolio',
     },
     description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
-    url: `${process.env.NEXT_PUBLIC_SITE_URL as string}`,//後で確認
+    url: '/',
     siteName: 'Atsushi Portfolio',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL as string}/og-image.webp`,
+        url: '/ogp/og-image.webp',
         width: 1200,
         height: 630,
       },
     ],
-    locale: 'jp',
+    locale: 'ja_JP',
     type: 'website',
   },
-  //↓後で確認
   robots: {
     index: true,
     follow: true,
@@ -46,23 +47,32 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: 'My Amazing Site',
     card: 'summary_large_image',
+    title: 'Atsushi Portfolio',
+    description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
+    images: [{
+      url: '/ogp/og-image.webp',
+      width: 1200,
+      height: 630,
+    },],
+    creator: '@wadoyoka',
   },
   icons: {
     icon: [
-      { url: 'favicons/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
-      { url: 'favicons/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicons/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicons/favicon.svg', type: 'image/svg+xml' },
     ],
-    shortcut: 'favicons/favicon.ico',
+    shortcut: '/favicons/favicon.ico',
     apple: [
-      { url: 'favicons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/favicons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
-  manifest: 'favicons/site.webmanifest',
-  appleWebApp: {
-    title: 'Atsushi',
-  },
+  manifest: '/favicons/site.webmanifest',
+  applicationName: 'Atsushi Portfolio',
+  keywords: ['portfolio', 'web development', 'Atsushi Enomoto', 'projects', 'blog'],
+  authors: [{ name: 'Atsushi Enomoto' }],
+  creator: 'Atsushi Enomoto',
+  publisher: 'Atsushi Enomoto',
 }
 
 export default async function RootLayout({

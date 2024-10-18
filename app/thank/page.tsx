@@ -1,4 +1,14 @@
+import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+    title: 'Thank',
+    description: 'Enomoto Atsushiのメール送信感謝ぺージです。',
+    openGraph: {
+        title: 'Contact',
+        description: 'Enomoto Atsushiのメール送信感謝ページです。',
+    },
+}
 
 export default function ThankYou() {
     return (

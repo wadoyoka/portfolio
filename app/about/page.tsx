@@ -10,6 +10,17 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'About',
         description: 'Enomoto Atsushiと当ポートフォリオについて説明したページです。',
+        url: '/about',
+        siteName: 'Atsushi Portfolio',
+        images: [
+            {
+                url: '/ogp/og-image.webp',
+                width: 1200,
+                height: 630,
+            },
+        ],
+        locale: 'ja_JP',
+        type: 'website',
     },
 }
 

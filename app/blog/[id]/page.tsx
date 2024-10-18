@@ -81,7 +81,16 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         openGraph: {
             title: post.title,
             description: post.summary,
-            images: [{ url: `/ogp/blog/${post.id}.webp` }],
+            url: `/blog/${resolvedParams.id}`,
+            siteName: 'Atsushi Portfolio',
+            images: [
+                {
+                    url: `/ogp/blog/${post.id}.webp`,
+                    width: 1200,
+                    height: 630,
+                },
+            ],
+            locale: 'ja_JP',
             type: 'article',
         },
         twitter: {

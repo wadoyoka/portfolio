@@ -1,6 +1,7 @@
 import Card from '@/components/elements/Card/Card'
 import { Badge } from "@/components/ui/badge"
 import { getAllContentIds, getAllContents, getContentById } from '@/utils/SSG/ssgUtils'
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -35,6 +36,31 @@ async function getTagById(tagId: string): Promise<Tag | null> {
 export async function generateStaticParams() {
     const tagIds = await getAllContentIds('tag','');
     return tagIds.map((id) => ({ id }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const resolvedParams = await params;
+    const tag = await getTagById(resolvedParams.id);
+    
+    if (!tag) {
+        notFound();
+    }
+
+
+    return {
+        title: tag.tag,
+        description: `Enomoto Atsushiのタグ「${tag.tag}」に関する制作物、ブログを集めたページです。`,
+        openGraph: {
+            title: tag.tag,
+            description: `Enomoto Atsushiのタグ「${tag.tag}」に関する制作物、ブログを集めたページです。`,
+            type: 'article',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title:  tag.tag,
+            description: `Enomoto Atsushiのタグ「${tag.tag}」に関する制作物、ブログを集めたページです。`,
+        },
+    };
 }
 
 export default async function TagPage({ params }: { params: Promise<{ id: string }> }) {

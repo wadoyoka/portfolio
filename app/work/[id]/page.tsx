@@ -143,14 +143,23 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
         openGraph: {
             title: post.title,
             description: post.summary,
-            images: [{ url: post.thumbnail.url }],
+            url: `/work/${post.id}`,
+            siteName: 'Atsushi Portfolio',
+            images: [
+                {
+                    url: `/ogp/work/${post.id}.webp`,
+                    width: 1200,
+                    height: 630,
+                },
+            ],
+            locale: 'ja_JP',
             type: 'article',
         },
         twitter: {
             card: 'summary_large_image',
             title: post.title,
             description: post.summary,
-            images: [post.thumbnail.url],
+            images: [`/ogp/work/${post.id}.webp`],
         },
     };
 }
