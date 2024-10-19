@@ -1,18 +1,22 @@
 'use client'
 
-import { usePathname } from "next/navigation"
-import Header from "./Header"
+import { useSession } from "next-auth/react";
 
-const PATHS_WITHOUT_HEADER = ['/login']
+import Header from "./Header";
+
 
 export default function HeaderCreator() {
-    const pathname = usePathname()
+    const { status } = useSession()
 
-    const shouldShowHeader = !PATHS_WITHOUT_HEADER.includes(pathname)
 
-    return (
-        <>
-            {shouldShowHeader && <Header />}
-        </>
-    )
+
+    if (status === 'authenticated') {
+        return (
+            <>
+                <Header />
+            </>
+        )
+    } else {
+        return <></>
+    }
 }

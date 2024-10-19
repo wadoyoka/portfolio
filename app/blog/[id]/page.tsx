@@ -132,7 +132,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
     const toc = renderToc(post.body);
 
     return (
-        <main>
+        <div>
             <div className="container mx-auto px-4 py-8 max-w-7xl mb-32">
                 <article itemScope itemType="http://schema.org/BlogPosting">
                     <h1 className="text-4xl font-bold mb-4" itemProp="headline">{post.title}</h1>
@@ -167,6 +167,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
                 </article>
             </div>
             <About />
-        </main>
+        </div>
     );
 }

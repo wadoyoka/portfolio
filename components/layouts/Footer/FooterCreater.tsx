@@ -1,18 +1,20 @@
 'use client';
 
-import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Footer from "./Footer";
 
-const PATHS_WITHOUT_FOOTER = ['/login']
 
 export default function FooterCreator() {
-    const pathname = usePathname()
+    const { status } = useSession()
 
-    const shouldShowFooter = !PATHS_WITHOUT_FOOTER.includes(pathname)
 
-    return (
-        <>
-            {shouldShowFooter && <Footer />}
-        </>
-    )
+    if (status === 'authenticated') {
+        return (
+            <>
+                <Footer />
+            </>
+        )
+    }else{
+        return <></>
+    }
 }

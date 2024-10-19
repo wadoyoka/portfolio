@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -29,14 +28,14 @@ export default function HeaderSearch() {
                     className="w-40 lg:w-64 pl-8 bg-background text-foreground"
                 />
             </div>
-            <Button 
+            {/* <Button 
                 type="submit" 
                 variant="secondary" 
                 size="sm" 
                 className="bg-secondary text-secondary-foreground hover:bg-secondary/80"
             >
                 検索
-            </Button>
+            </Button> */}
         </form>
     )
 }
