@@ -67,7 +67,7 @@ export default async function BlogPage() {
     const blogPosts = await getBlogPosts();
 
     return (
-        <div className="min-h-screen flex flex-col bg-gray-50">
+        <div className="min-h-[80vh] flex flex-col bg-gray-50">
             <main>
                 <Blog blogPosts={blogPosts} />
             </main>

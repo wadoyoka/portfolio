@@ -1,9 +1,10 @@
 import Card from '@/components/elements/Card/Card'
-import { Badge } from "@/components/ui/badge"
+import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getAllContentIds, getAllContents, getContentById } from '@/utils/SSG/ssgUtils'
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
+
 
 interface Tag {
     id: string;
@@ -80,6 +81,26 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     };
 }
 
+function ResultGrid({ items, linkPrefix }: { items: ContentItem[], linkPrefix: string }) {
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {items.map((item) => (
+                <Card
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    thumbnailUrl={item.thumbnail.url}
+                    tags={item.tags}
+                    linkPrefix={linkPrefix}
+                    publishedAt={item.publishedAt}
+                    summary={item.summary}
+                />
+            ))}
+        </div>
+    )
+}
+
+
 export default async function TagPage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
     const { works, blogPosts } = await getContentByTag(resolvedParams.id);
@@ -90,62 +111,26 @@ export default async function TagPage({ params }: { params: Promise<{ id: string
     }
 
     return (
-        <>
-            <div className="container mx-auto px-4 py-8">
-                <h1 className="text-3xl font-bold mb-6 flex items-center">
-                    Content tagged with:
-                    <Badge variant="outline" className="ml-2 text-xl">
-                        {tag.tag}
-                    </Badge>
-                </h1>
+        <div className="container mx-auto px-4 py-8 max-w-7xl">
+            <h1 className="text-3xl font-bold mb-6 flex items-center">
+                Tag:
+                <Badge variant="outline" className="ml-2 text-xl">
+                    {tag.tag}
+                </Badge>
+            </h1>
+            <Tabs defaultValue="work" className="w-full">
+                <TabsList className='bg-slate-200'>
+                    <TabsTrigger value="work">work {works.length}</TabsTrigger>
+                    <TabsTrigger value="blog">Blog {blogPosts.length}</TabsTrigger>
+                </TabsList>
+                <TabsContent value="work">
+                    <ResultGrid items={works} linkPrefix="/work/" />
+                </TabsContent>
+                <TabsContent value="blog">
+                    <ResultGrid items={blogPosts} linkPrefix="/blog/" />
+                </TabsContent>
+            </Tabs>
 
-                {works.length === 0 && blogPosts.length === 0 ? (
-                    <p className="text-xl text-gray-600">No content found with this tag.</p>
-                ) : (
-                    <>
-                        {works.length > 0 && (
-                            <>
-                                <h2 className="text-2xl font-bold mt-8 mb-4">Works</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {works.map((work) => (
-                                        <Card
-                                            key={work.id}
-                                            id={work.id}
-                                            title={work.title}
-                                            thumbnailUrl={`/ogp/work/${work.id}.webp`}
-                                            tags={work.tags}
-                                            linkPrefix="/work/"
-                                        />
-                                    ))}
-                                </div>
-                            </>
-                        )}
-
-                        {blogPosts.length > 0 && (
-                            <>
-                                <h2 className="text-2xl font-bold mt-8 mb-4">Blog Posts</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {blogPosts.map((post) => (
-                                        <Card
-                                            key={post.id}
-                                            id={post.id}
-                                            title={post.title}
-                                            thumbnailUrl={`/ogp/blog/${post.id}.webp`}
-                                            tags={post.tags}
-                                            linkPrefix="/blog/"
-                                            publishedAt={post.publishedAt}
-                                        />
-                                    ))}
-                                </div>
-                            </>
-                        )}
-                    </>
-                )}
-
-                <Link href="/" className="mt-8 inline-block text-blue-600 hover:underline">
-                    ← Back to Home
-                </Link>
-            </div>
-        </>
+        </div>
     )
 }

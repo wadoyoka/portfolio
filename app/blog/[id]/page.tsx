@@ -154,8 +154,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
                         />
                     </div>
                     <div className="mb-4">
-                        <p className="text-gray-600">Published: <time itemProp="datePublished" dateTime={post.publishedAt}>{publishedDate}</time></p>
-                        <p className="text-gray-600">Last updated: <time itemProp="dateModified" dateTime={post.updatedAt}>{updatedDate}</time></p>
+                        <p className="text-gray-600">公開日: <time itemProp="datePublished" dateTime={post.publishedAt}>{publishedDate}</time></p>
+                        <p className="text-gray-600">更新日: <time itemProp="dateModified" dateTime={post.updatedAt}>{updatedDate}</time></p>
                     </div>
                     <p className="text-xl mb-8" itemProp="description">{post.summary}</p>
                     <nav aria-label="Table of Contents">

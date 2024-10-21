@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import styles from './TableOfContents.module.scss';
 
@@ -28,17 +29,17 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ toc }) => {
 
             result.push(
                 <li key={data.id}>
-                    <a href={`#${data.id}`}>
+                    <Link href={`#${data.id}`} className='text-blue-600 hover:text-orange-500 decoration-2 hover:underline focus:outline-none focus:underline visited:text-purple-600'>
                         {data.text}
-                    </a>
+                    </Link>
                 </li>
             );
         } else if (data.name === 'h2') {
             h2List.push(
                 <li key={data.id}>
-                    <a href={`#${data.id}`}>
+                    <Link href={`#${data.id}`} className='text-blue-600 hover:text-orange-500 decoration-2 hover:underline focus:outline-none focus:underline visited:text-purple-600'>
                         {data.text}
-                    </a>
+                    </Link>
                 </li>
             );
         }

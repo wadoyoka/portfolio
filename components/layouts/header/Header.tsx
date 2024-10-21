@@ -1,10 +1,8 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu } from "lucide-react"
 import Image from 'next/image'
 import Link from 'next/link'
+import HamburgerMenu from './HamburgerMenu'
 import HeaderSearch from "./HeaderSearch"
 
 const menuItems = [
@@ -21,7 +19,7 @@ export default function Header() {
     return (
         <header className="bg-primary text-primary-foreground">
             <div className="container mx-auto flex justify-between items-center py-4 max-w-7xl">
-                <Link href="/" className="flex items-center">
+                <Link href="/" className="flex items-center hover:opacity-60 duration-300">
                     <Image
                         src="/logo.png"
                         alt="Enomoto Atsushi Logo"
@@ -42,35 +40,12 @@ export default function Header() {
                         ))}
                     </ul>
                 </nav>
-                <div className="hidden md:block">
-                    <HeaderSearch />
+                <div className="flex items-center space-x-2">
+                    <div className="hidden md:block">
+                        <HeaderSearch />
+                    </div>
+                    <HamburgerMenu />
                 </div>
-                <Sheet>
-                    <SheetTrigger asChild>
-                        <Button variant="ghost" size="icon" className="md:hidden">
-                            <Menu className="h-6 w-6" />
-                            <span className="sr-only">Toggle menu</span>
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                        <nav className="flex flex-col gap-4">
-                            {menuItems.map((item) => (
-                                <SheetClose asChild key={item.href}>
-                                    <Link
-                                        key={item.href}
-                                        href={item.href}
-                                        className="block px-2 py-1 text-lg"
-                                    >
-                                        {item.label}
-                                    </Link>
-                                </SheetClose>
-                            ))}
-                        </nav>
-                        {/* <div className="mt-6">
-                            <HeaderSearch />
-                        </div> */}
-                    </SheetContent>
-                </Sheet>
             </div>
         </header>
     )

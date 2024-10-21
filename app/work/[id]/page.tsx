@@ -5,7 +5,6 @@ import { TableOfContents } from '@/components/layouts/TableOfContents/TableOfCon
 import { renderToc } from '@/libs/render-toc'
 import createOgp from "@/utils/ogpUtils"
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
-import { format, isValid, parseISO } from 'date-fns'
 import parse from 'html-react-parser'
 import { Metadata } from "next"
 import Image from 'next/image'
@@ -19,8 +18,7 @@ interface Tag {
 interface WorkItem {
     id: string;
     title: string;
-    createStartDate?: string;
-    createEndDate?: string;
+    createDate: string;
     summary: string;
     body: string;
     thumbnail: {
@@ -53,11 +51,11 @@ async function generateStaticParams() {
     return ids.map((id) => ({ id }));
 }
 
-function formatDate(dateString: string | undefined): string {
-    if (!dateString) return 'Not specified';
-    const date = parseISO(dateString);
-    return isValid(date) ? format(date, 'yyyy/MM/dd') : 'Invalid Date';
-}
+// function formatDate(dateString: string | undefined): string {
+//     if (!dateString) return 'Not specified';
+//     const date = parseISO(dateString);
+//     return isValid(date) ? format(date, 'yyyy/MM/dd') : 'Invalid Date';
+// }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
@@ -85,8 +83,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         });
     }
 
-    const startDate = formatDate(work.createStartDate);
-    const endDate = formatDate(work.createEndDate);
+    // const startDate = formatDate(work.createStartDate);
+    // const endDate = formatDate(work.createEndDate);
 
     const toc = renderToc(work.body);
 
@@ -118,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                             ))}
                         </div>
                         <p className="text-lg mb-4">
-                            制作期間: {startDate} ~ {endDate}
+                            制作時期: {work.createDate}
                         </p>
                         <p className="text-xl mb-8">{work.summary}</p>
                         <TableOfContents toc={toc} />

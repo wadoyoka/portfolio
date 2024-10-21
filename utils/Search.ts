@@ -33,7 +33,7 @@ export async function performSearch(query: string): Promise<{ success: boolean; 
     try {
         const searchResults = await client.getAllContents({
             endpoint: 'atsushi-portfolio',
-            queries: { q: query },
+            queries: { q: query, fields: 'id,publishedAt,title,thumbnail,tags,summary,category' },
         })
 
         return {

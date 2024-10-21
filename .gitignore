@@ -41,3 +41,6 @@ public/ogp/blog/*
 !public/ogp/blog/.gitkeep
 public/ogp/work/*
 !public/ogp/work/.gitkeep
+public/robots.txt
+public/sitemap-0.xml
+public/sitemap.xml

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build  && next-sitemap --config next-sitemap.config.js",
     "start": "next start",
     "lint": "next lint"
   },
@@ -34,6 +34,7 @@
     "microcms-js-sdk": "^3.1.2",
     "next": "^14.2.15",
     "next-auth": "^4.24.8",
+    "next-sitemap": "^4.2.3",
     "nodemailer": "^6.9.15",
     "portfolio": "file:",
     "react": "^18.3.1",

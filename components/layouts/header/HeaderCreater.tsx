@@ -12,9 +12,7 @@ export default function HeaderCreator() {
 
     if (status === 'authenticated') {
         return (
-            <>
-                <Header />
-            </>
+            <Header />
         )
     } else {
         return <></>

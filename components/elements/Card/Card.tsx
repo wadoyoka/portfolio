@@ -27,14 +27,14 @@ const Card: React.FC<CardProps> = ({ id, title, thumbnailUrl, tags, linkPrefix =
                         src={thumbnailUrl}
                         alt={title}
                         fill
-                        style={{ objectFit: 'contain' }}
+                        style={{ objectFit: 'cover' }}
                     />
                 </div>
                 <div className="p-4">
                     <h3 className="text-xl font-semibold mb-2">{title}</h3>
                     {publishedAt && (
                         <p className="text-sm text-gray-500 mb-2">
-                            Published: {new Date(publishedAt).toLocaleDateString()}
+                            公開日: {new Date(publishedAt).toLocaleDateString()}
                         </p>
                     )}
                     {summary && <p className="text-gray-600 text-sm mb-2">{summary}</p>}

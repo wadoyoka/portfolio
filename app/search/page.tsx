@@ -4,6 +4,7 @@ import { performSearch, SearchResult } from '@/utils/Search';
 import { Suspense } from 'react';
 
 async function SearchResults({ query }: { query: string }) {
+    
     const results = await performSearch(query)
 
     if (!results.success) {
