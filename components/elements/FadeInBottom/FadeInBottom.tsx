@@ -1,4 +1,6 @@
-import React from "react";
+'use client';
+
+import React, { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
 type Props = {
@@ -6,29 +8,34 @@ type Props = {
 };
 
 export const FadeInBottom: React.FC<Props> = ({ children }) => {
-    const { ref, inView } = useInView({
-        // ref要素が現れてから50px過ぎたら
+    const { ref: inViewRef, inView } = useInView({
         rootMargin: "-50px",
-        // 最初の一度だけ実行
         triggerOnce: true,
     });
 
     const fadeInClassName = inView ? "animate-fade-in-bottom" : "opacity-0";
 
-    const wrappedChildren = React.Children.map(children, child => {
-        if (React.isValidElement(child)) {
-            const className = [child.props.className, fadeInClassName]
-                .filter(el => el)
-                .join(" ");
+    const childRef = useRef<HTMLElement | null>(null);
 
-            return React.cloneElement(child as React.ReactElement, {
-                ref,
-                className,
-            });
-        } else {
-            return child;
+    const setRefs = React.useCallback(
+        (node: HTMLElement | null) => {
+            childRef.current = node;
+            inViewRef(node);
+        },
+        [inViewRef]
+    );
+
+    useEffect(() => {
+        if (childRef.current) {
+            if (inView) {
+                childRef.current.classList.add(fadeInClassName);
+            } else {
+                childRef.current.classList.remove(fadeInClassName);
+            }
         }
-    });
+    }, [inView, fadeInClassName]);
 
-    return <>{wrappedChildren}</>;
+    return React.cloneElement(React.Children.only(children) as React.ReactElement, {
+        ref: setRefs,
+    });
 };
