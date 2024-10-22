@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import HamburgerMenu from './HamburgerMenu'
 import HeaderSearch from "./HeaderSearch"
+import MobileSearch from './MobileSearch'
 
 const menuItems = [
     { href: "/", label: "Top" },
@@ -44,6 +45,7 @@ export default function Header() {
                     <div className="hidden md:block">
                         <HeaderSearch />
                     </div>
+                    <MobileSearch />
                     <HamburgerMenu />
                 </div>
             </div>
