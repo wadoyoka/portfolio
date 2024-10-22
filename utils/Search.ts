@@ -2,6 +2,7 @@
 
 import { client } from '@/libs/client'
 import { headers } from 'next/headers'
+import { NextRequest } from 'next/server'
 import { checkRateLimitAction } from './ratelimit'
 
 export type SearchResult = {
@@ -22,7 +23,7 @@ export async function performSearch(query: string): Promise<{ success: boolean; 
     const mockRequest = {
         headers: headers(),
         ip: (await headers()).get('x-forwarded-for') || 'unknown',
-    } as any
+    } as unknown as NextRequest
 
     const { allowed, message, remainingAttempts } = await checkRateLimitAction(mockRequest, 'search')
 

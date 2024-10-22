@@ -1,7 +1,10 @@
 import DataFetcher from '@/lib/DateFether';
 import { CryptoUtils } from '@/utils/crypto-utils';
+import { checkRateLimitAction } from '@/utils/ratelimit';
 import NextAuth, { DefaultSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { headers } from 'next/headers';
+import { NextRequest } from 'next/server';
 declare module "next-auth" {
     interface Session extends DefaultSession {
         user: {
@@ -46,6 +49,20 @@ const authOptions: NextAuthOptions = {
                 }
 
                 try {
+                    const mockRequest = {
+                        headers: headers(),
+                        ip: (await headers()).get('x-forwarded-for') || 'unknown',
+                    } as unknown as NextRequest
+                    const rateLimitResult = await checkRateLimitAction(mockRequest, 'login');
+
+                    if (!rateLimitResult.allowed) {
+                        throw new Error(JSON.stringify({
+                            type: 'rate_limit',
+                            message: rateLimitResult.message,
+                            remainingAttempts: rateLimitResult.remainingAttempts
+                        }));
+                    }
+
                     const hashedUserName = await CryptoUtils.base64Encode(credentials.username);
                     console.log(hashedUserName)
 
@@ -61,11 +78,14 @@ const authOptions: NextAuthOptions = {
                     const secretUnion = base64EncodedInputPass + (process.env.SECRET_LOGIN_PASS_KEY as string);
                     const sha256HashedInputPass = await CryptoUtils.sha256Hash(secretUnion);
                     const ispass = await CryptoUtils.comparePassword(sha256HashedInputPass, user.PassWord);
-                    console.log('ispass\t'+ispass)
+                    console.log('ispass\t' + ispass)
 
                     if (!ispass) {
                         console.log("Invalid password");
-                        return null;
+                        throw new Error(JSON.stringify({
+                            type: 'auth_error',
+                            message: 'Invalid username or password'
+                        }));
                     }
 
                     return {
@@ -75,6 +95,11 @@ const authOptions: NextAuthOptions = {
                     };
                 } catch (error) {
                     console.error("Error during authentication:", error);
+                    console.log(typeof(error))
+                    if (error instanceof Error) {
+                        console.log('-----------------gggggggggggggggggggg-------------')
+                        throw new Error(error.message); // This will be caught by NextAuth and returned to the client
+                    }
                     return null;
                 }
             }
@@ -101,7 +126,7 @@ const authOptions: NextAuthOptions = {
     },
     session: {
         strategy: "jwt",
-        maxAge: 1 * 60 * 60,
+        maxAge: 60,
     },
 };
 

@@ -18,6 +18,7 @@ const BLOCK_DURATION = 3600 // 1 hour
 const LIMITS = {
     email: { max: 5, window: 60 * 60 }, // 5 requests per hour
     search: { max: 20, window: 60 }, // 20 requests per minute
+    login: { max: 10, window: 60 * 60 }, // 10 requests per hour
 }
 
 // Global limit to prevent DDoS
@@ -50,7 +51,7 @@ async function blockIP(hashedIP: string): Promise<void> {
     await redis.set(`blocked:${hashedIP}`, '1', { ex: BLOCK_DURATION })
 }
 
-async function checkRateLimit(hashedIP: string, action: 'email' | 'search'): Promise<boolean> {
+async function checkRateLimit(hashedIP: string, action: 'email' | 'search' | 'login'): Promise<boolean> {
     const now = Math.floor(Date.now() / 1000)
     const actionKey = `ratelimit:${action}:${hashedIP}`
     const globalKey = `ratelimit:global:${hashedIP}`
@@ -81,7 +82,7 @@ async function checkRateLimit(hashedIP: string, action: 'email' | 'search'): Pro
     return true
 }
 
-export async function checkRateLimitAction(req: NextRequest, action: 'email' | 'search'): Promise<{ allowed: boolean; message: string; remainingAttempts: number }> {
+export async function checkRateLimitAction(req: NextRequest, action: 'email' | 'search' | 'login'): Promise<{ allowed: boolean; message: string; remainingAttempts: number }> {
     const ip = await getClientIP(req)
     const hashedIP = hashIP(ip)
 
