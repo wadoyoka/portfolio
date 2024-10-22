@@ -89,7 +89,7 @@ function ResultGrid({ items, linkPrefix }: { items: ContentItem[], linkPrefix: s
                     key={item.id}
                     id={item.id}
                     title={item.title}
-                    thumbnailUrl={item.thumbnail.url}
+                    thumbnailUrl={`/ogp${linkPrefix}${item.id}.webp`}
                     tags={item.tags}
                     linkPrefix={linkPrefix}
                     publishedAt={item.publishedAt}
