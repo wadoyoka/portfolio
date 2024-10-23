@@ -10,7 +10,7 @@ if (!getApps().length) {
 
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
-        databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL
+        databaseURL: process.env.FIREBASE_DATABASE_URL
     });
 }
 
