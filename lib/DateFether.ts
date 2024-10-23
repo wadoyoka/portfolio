@@ -3,7 +3,6 @@
 import { adminDb } from '@/lib/firebase-admin';
 
 async function fetchData(username: string) {
-    console.log(username)
     const snapshot = await adminDb.collection('PortfolioPass')
         .where('UserName', '==', username)
         .get();

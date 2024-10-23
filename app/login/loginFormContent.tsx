@@ -44,23 +44,24 @@ export default function LoginFormContent() {
 
                 if (result?.error) {
                     try {
-                        console.log(error);
+                        console.log(result.error);
                         const errorData = JSON.parse(result.error);
                         if (errorData.type === 'rate_limit') {
                             setError(errorData.message);
                             setRemainingAttempts(errorData.remainingAttempts);
                         } else if (errorData.type === 'auth_error') {
                             setError(errorData.message);
+                            setRemainingAttempts(errorData.remainingAttempts);
                         } else {
-                            setError('An unexpected error occurred');
+                            setError('予期しないエラーが発生しました');
                         }
                     } catch {
-                        setError('An unexpected error occurred');
+                        setError('予期しないエラーが発生しました');
                     }
                 }
             } catch (error) {
                 console.error('Login error:', error)
-                setError('An error occurred during login')
+                setError('予期しないエラーが発生しました')
             }
         })
     }
@@ -93,7 +94,7 @@ export default function LoginFormContent() {
                 <div id="login-error" className="text-red-500 text-sm" role="alert">
                     <p>{error}</p>
                     {remainingAttempts !== null && (
-                        <p>Remaining attempts: {remainingAttempts}</p>
+                        <p>ログイン試行ロックまで、あと {remainingAttempts}回</p>
                     )}
                 </div>
             )}

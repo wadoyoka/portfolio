@@ -58,33 +58,33 @@ const authOptions: NextAuthOptions = {
                     if (!rateLimitResult.allowed) {
                         throw new Error(JSON.stringify({
                             type: 'rate_limit',
-                            message: rateLimitResult.message,
+                            message: 'ログイン制限にかかりました、また1時間後にお試しください。',
                             remainingAttempts: rateLimitResult.remainingAttempts
                         }));
                     }
 
                     const hashedUserName = await CryptoUtils.base64Encode(credentials.username);
-                    console.log(hashedUserName)
 
                     const users = await DataFetcher(hashedUserName) as FirestoreUser[];
-                    console.log(users);
                     const user = users[0]
                     if (!user) {
-                        console.log("User not found");
-                        return null;
+                        throw new Error(JSON.stringify({
+                            type: 'auth_error',
+                            message: 'ユーザー名または、パスワードが間違っています。',
+                            remainingAttempts: rateLimitResult.remainingAttempts
+                        }));
                     }
 
                     const base64EncodedInputPass = await CryptoUtils.base64Encode(credentials.password);
                     const secretUnion = base64EncodedInputPass + (process.env.SECRET_LOGIN_PASS_KEY as string);
                     const sha256HashedInputPass = await CryptoUtils.sha256Hash(secretUnion);
                     const ispass = await CryptoUtils.comparePassword(sha256HashedInputPass, user.PassWord);
-                    console.log('ispass\t' + ispass)
 
                     if (!ispass) {
-                        console.log("Invalid password");
                         throw new Error(JSON.stringify({
                             type: 'auth_error',
-                            message: 'Invalid username or password'
+                            message: 'ユーザー名または、パスワードが間違っています。',
+                            remainingAttempts: rateLimitResult.remainingAttempts
                         }));
                     }
 
@@ -94,12 +94,10 @@ const authOptions: NextAuthOptions = {
                         name: user.UserName
                     };
                 } catch (error) {
-                    console.error("Error during authentication:", error);
-                    console.log(typeof(error))
                     if (error instanceof Error) {
-                        console.log('-----------------gggggggggggggggggggg-------------')
-                        throw new Error(error.message); // This will be caught by NextAuth and returned to the client
+                        throw error; // This will be caught by NextAuth and returned to the client
                     }
+                    console.error("Error during authentication:", error);
                     return null;
                 }
             }
@@ -126,7 +124,7 @@ const authOptions: NextAuthOptions = {
     },
     session: {
         strategy: "jwt",
-        maxAge: 60,
+        maxAge: 1* 60 * 60,
     },
 };
 
