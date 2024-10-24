@@ -120,7 +120,7 @@ const createOgp = async ({
         const outputPath = path.resolve(`./public/ogp/${exportPlace}/${dynamic}.webp`);
         await fs.writeFile(outputPath, outputBuffer);
 
-        console.log(`OGP image created and saved as WebP: ${outputPath}`);
+        console.log(`OGP image created and saved as WebP: ${exportPlace}/${dynamic}.webp`);
     } catch (error) {
         console.error("Error creating or saving OGP image:", error);
         throw error;

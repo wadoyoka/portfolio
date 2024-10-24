@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import HamburgerMenu from './HamburgerMenu'
-import HeaderSearch from "./HeaderSearch"
 import MobileSearch from './MobileSearch'
 
 const menuItems = [
@@ -42,9 +41,6 @@ export default function Header() {
                     </ul>
                 </nav>
                 <div className="flex items-center space-x-2">
-                    <div className="hidden md:block">
-                        <HeaderSearch />
-                    </div>
                     <MobileSearch />
                     <HamburgerMenu />
                 </div>

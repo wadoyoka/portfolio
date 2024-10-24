@@ -25,11 +25,25 @@ export default function MobileSearch() {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden" aria-label="Menu">
-                    <Search />
-                </Button>
+                <div>
+                    <Button variant="ghost" size="icon" aria-label="Menu" className="md:hidden">
+                            <Search />
+                    </Button>
+                    <Button variant="ghost" aria-label="Menu" className="hidden md:block">
+                        <div className="flex items-center space-x-2">
+                            <div className="relative">
+                                <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                                <Input
+                                    type="search"
+                                    placeholder="検索..."
+                                    className="w-40 lg:w-64 pl-8 bg-background text-foreground"
+                                />
+                            </div>
+                        </div>
+                    </Button>
+                </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md sm:max-w-[425px] top-4 translate-y-0">
+            <DialogContent className="sm:max-w-md sm:max-w-[425px] md:max-w-3xl lg:max-w-4xl xl:max-w-5xl max-md:top-4 max-md:translate-y-0">
                 <DialogHeader>
                     <DialogTitle>検索</DialogTitle>
                     <DialogDescription>

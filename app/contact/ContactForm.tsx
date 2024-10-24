@@ -5,11 +5,9 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { sendEmail } from "@/utils/mail"
-import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 
 export default function ContactForm() {
-    const router = useRouter()
     const { toast } = useToast()
     const [isPending, startTransition] = useTransition()
     const [formData, setFormData] = useState({
@@ -29,25 +27,8 @@ export default function ContactForm() {
         setFormData(prev => ({ ...prev, [name]: value }))
     }
 
-    const validateForm = () => {
-        if (formData.name.trim() === '') {
-            toast({ title: "Error", description: "Name is required", variant: "destructive" })
-            return false
-        }
-        if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-            toast({ title: "Error", description: "Invalid email address", variant: "destructive" })
-            return false
-        }
-        if (formData.message.trim().length < 10) {
-            toast({ title: "Error", description: "Message must be at least 10 characters long", variant: "destructive" })
-            return false
-        }
-        return true
-    }
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (!validateForm()) return
 
         startTransition(async () => {
             const formDataToSend = new FormData()
@@ -57,10 +38,9 @@ export default function ContactForm() {
 
             const result = await sendEmail(formDataToSend)
             if (result.success) {
-                toast({ title: "Success", description: "Email sent successfully" })
-                router.push('/thank')
+                toast({ title: "送信完了", description: "メールは正しく送信されました！" })
             } else {
-                toast({ title: "Error", description: result.message, variant: "destructive" })
+                toast({ title: "送信エラー", description: result.message })
             }
         })
     }

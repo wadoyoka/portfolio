@@ -30,7 +30,7 @@ export async function performSearch(query: string): Promise<{ success: boolean; 
     if (!allowed) {
         return { success: false, message, remainingAttempts, results: [] }
     }
-    console.log(query);
+
     try {
         const searchResults = await client.getAllContents({
             endpoint: 'atsushi-portfolio',

@@ -1,6 +1,8 @@
+import About from '@/components/layouts/About/About';
 import Top from '@/components/layouts/Top/top';
 import Works from '@/components/layouts/Works/Works';
 import { client } from '@/libs/client';
+import ToptoWork from './scroll-to-work';
 
 interface WorkItem {
   id: string;
@@ -43,7 +45,9 @@ export default async function Home() {
     <div className="min-h-screen flex flex-col">
       <main>
         <Top></Top>
+        <ToptoWork/>
         <Works works={works} />
+        <About/>
       </main>
     </div>
   )
