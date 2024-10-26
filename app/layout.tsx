@@ -1,5 +1,5 @@
 import FooterCreator from '@/components/layouts/Footer/FooterCreater';
-import HeaderCreator from '@/components/layouts/Header/HeaderCreater';
+import HeaderCreator from '@/components/layouts/Headers/HeaderCreater';
 import { Toaster } from '@/components/ui/toaster';
 import BreadcrumbJsonLd from '@/utils/BreadcrumbJsonLd';
 import { Metadata } from 'next';
