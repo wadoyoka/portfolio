@@ -66,7 +66,7 @@ export default function HamburgerMenu() {
                             href={item.href}
                             className={`flex text-lg font-medium transition-colors ${(pathname === item.href)
                                 ? 'text-blue-600 hover:text-blue-700'
-                                : 'text-foreground hover:text-primary bg-white text-black'
+                                : 'bg-white text-black'
                                 }`}
                             onClick={() => setIsOpen(false)}
                         >
