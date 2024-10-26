@@ -16,7 +16,7 @@ const TagBadge: React.FC<TagBadgeProps> = ({ tag }) => {
         <Link href={`/tag/${tag.id}`}>
             <Badge
                 variant="outline"
-                className="cursor-pointer transition-all duration-300 bg-slate-200 hover:bg-blue-600 hover:text-white"
+                className="cursor-pointer transition-all duration-300 text-white bg-slate-200 hover:bg-blue-600 hover:text-white"
             >
                 {tag.tag}
             </Badge>

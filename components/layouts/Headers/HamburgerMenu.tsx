@@ -50,11 +50,11 @@ export default function HamburgerMenu() {
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden" aria-label="Menu">
+                <Button variant="ghost" size="icon" className="md:hidden bg-white text-black" aria-label="Menu">
                     <Menu className="h-6 w-6" />
                 </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white text-black">
                 <SheetTitle className="sr-only">Menu</SheetTitle>
                 <SheetDescription className="sr-only">
                     Navigate through our site using the links below.

@@ -29,7 +29,7 @@ export default function MobileSearch() {
                     <Button variant="ghost" size="icon" aria-label="Menu" className="md:hidden">
                             <Search />
                     </Button>
-                    <Button variant="ghost" aria-label="Menu" className="hidden md:block">
+                    <Button variant="ghost" aria-label="Menu" className="hidden md:block bg-white text-black">
                         <div className="flex items-center space-x-2">
                             <div className="relative">
                                 <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -43,7 +43,7 @@ export default function MobileSearch() {
                     </Button>
                 </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md sm:max-w-[425px] md:max-w-3xl lg:max-w-4xl xl:max-w-5xl max-md:top-4 max-md:translate-y-0">
+            <DialogContent className="sm:max-w-md sm:max-w-[425px] md:max-w-3xl lg:max-w-4xl xl:max-w-5xl max-md:top-4 max-md:translate-y-0 bg-white text-black">
                 <DialogHeader>
                     <DialogTitle>検索</DialogTitle>
                     <DialogDescription>
