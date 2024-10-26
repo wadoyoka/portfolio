@@ -58,7 +58,7 @@ export default function ContactForm() {
             </p>
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1 bg-white text-black">
                         Name
                     </label>
                     <Input
@@ -70,7 +70,7 @@ export default function ContactForm() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 bg-white text-black">
                         MAIL ADRESS
                     </label>
                     <Input
@@ -83,7 +83,7 @@ export default function ContactForm() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1 bg-white text-black">
                         MESSAGE
                     </label>
                     <Textarea

@@ -116,14 +116,14 @@ export default async function TagPage({ params }: { params: Promise<{ id: string
         <div className="container mx-auto px-4 py-8 max-w-7xl">
             <h1 className="text-3xl font-bold mb-6 flex items-center">
                 Tag:
-                <Badge variant="outline" className="ml-2 text-xl">
+                <Badge variant="outline" className="ml-2 text-xl bg-white text-black">
                     {tag.tag}
                 </Badge>
             </h1>
             <Tabs defaultValue="work" className="w-full">
                 <TabsList className='bg-slate-200'>
-                    <TabsTrigger value="work">work {works.length}</TabsTrigger>
-                    <TabsTrigger value="blog">Blog {blogPosts.length}</TabsTrigger>
+                    <TabsTrigger value="work" className='focus-visible:bg-white focus-visible:text-black'>work {works.length}</TabsTrigger>
+                    <TabsTrigger value="blog" className='focus-visible:bg-white focus-visible:text-black'>Blog {blogPosts.length}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="work">
                     <ResultGrid items={works} linkPrefix="/work/" />

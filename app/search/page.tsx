@@ -17,8 +17,8 @@ async function SearchResults({ query }: { query: string }) {
     return (
         <Tabs defaultValue="work" className="w-full">
             <TabsList className='bg-slate-200'>
-                <TabsTrigger value="work">work {workResults.length}</TabsTrigger>
-                <TabsTrigger value="blog">Blog {blogResults.length}</TabsTrigger>
+                <TabsTrigger value="work" className='focus-visible:bg-white focus-visible:text-black'>work {workResults.length}</TabsTrigger>
+                <TabsTrigger value="blog" className='focus-visible:bg-white focus-visible:text-black'>Blog {blogResults.length}</TabsTrigger>
             </TabsList>
             <TabsContent value="work">
                 <ResultGrid items={workResults} linkPrefix="/work/" />
