@@ -122,8 +122,8 @@ export default async function TagPage({ params }: { params: Promise<{ id: string
             </h1>
             <Tabs defaultValue="work" className="w-full">
                 <TabsList className='bg-slate-200'>
-                    <TabsTrigger value="work" className='focus-visible:bg-white focus-visible:text-black'>work {works.length}</TabsTrigger>
-                    <TabsTrigger value="blog" className='focus-visible:bg-white focus-visible:text-black'>Blog {blogPosts.length}</TabsTrigger>
+                    <TabsTrigger value="work" className='data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:font-bold'>work {works.length}</TabsTrigger>
+                    <TabsTrigger value="blog" className='data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:font-bold'>Blog {blogPosts.length}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="work">
                     <ResultGrid items={works} linkPrefix="/work/" />
