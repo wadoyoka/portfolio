@@ -83,7 +83,7 @@ export default function ContactForm() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1 bg-white text-black">
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
                         MESSAGE
                     </label>
                     <Textarea
@@ -93,6 +93,7 @@ export default function ContactForm() {
                         onChange={handleChange}
                         required
                         rows={6}
+                        className="bg-white text-black"
                     />
                 </div>
                 <SubmitButton submitButtonContent={submitButtonContent} />
