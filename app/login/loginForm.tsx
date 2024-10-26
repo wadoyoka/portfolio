@@ -13,7 +13,7 @@ export default function LoginForm() {
                         <div className="flex justify-center items-center">
                             <div className="w-10 h-10 relative pr-4">
                                 <Image
-                                    src="/logo.png"
+                                    src={`${process.env.NEXT_PUBLIC_SITE_URL}logo.png`}
                                     alt="logo"
                                     fill
                                     style={{ objectFit: 'cover' }}
