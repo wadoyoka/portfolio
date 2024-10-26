@@ -1,7 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Image from "next/image"
-import { Suspense } from "react"
-import LoginFormContent from "./loginFormContent"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Image from "next/image";
+import { Suspense } from "react";
+import LoginFormContent from "./loginFormContent";
+import logo from './logo.png';
 
 export default function LoginForm() {
 
@@ -13,7 +14,7 @@ export default function LoginForm() {
                         <div className="flex justify-center items-center">
                             <div className="w-10 h-10 relative pr-4">
                                 <Image
-                                    src={`${process.env.NEXT_PUBLIC_SITE_URL}logo.png`}
+                                    src={logo}
                                     alt="logo"
                                     fill
                                     style={{ objectFit: 'cover' }}
