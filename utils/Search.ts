@@ -10,7 +10,8 @@ export type SearchResult = {
     title: string
     summary: string
     category: string[]
-    publishedAt: string;
+    publishedAt?: string;
+    createDate?: string;
     tags: { id: string; tag: string }[]
     thumbnail: {
         url: string

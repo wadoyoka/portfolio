@@ -20,6 +20,7 @@ interface ContentItem {
         width: number;
     };
     tags: Tag[];
+    createDate?: string;
     publishedAt?: string;
     summary?: string;
 }
@@ -93,6 +94,7 @@ function ResultGrid({ items, linkPrefix }: { items: ContentItem[], linkPrefix: s
                     tags={item.tags}
                     linkPrefix={linkPrefix}
                     publishedAt={item.publishedAt}
+                    createDate={item.createDate}
                     summary={item.summary}
                 />
             ))}

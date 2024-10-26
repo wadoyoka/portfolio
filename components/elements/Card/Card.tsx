@@ -16,10 +16,11 @@ interface CardProps {
     tags: Tag[];
     linkPrefix?: string;
     publishedAt?: string;
+    createDate?: string;
     summary?: string;
 }
 
-const Card: React.FC<CardProps> = ({ id, title, thumbnailUrl, tags, linkPrefix = '/work/', publishedAt, summary }) => {
+const Card: React.FC<CardProps> = ({ id, title, thumbnailUrl, tags, linkPrefix = '/work/', publishedAt, createDate,summary }) => {
     return (
         <div className='transition-transform duration-300 hover:scale-105 w-full'>
             <FadeInBottom>
@@ -36,9 +37,14 @@ const Card: React.FC<CardProps> = ({ id, title, thumbnailUrl, tags, linkPrefix =
                         </div>
                         <div className="p-4 flex-grow flex flex-col">
                             <h3 className="text-xl font-semibold mb-2">{title}</h3>
-                            {publishedAt && (
+                            {(publishedAt && linkPrefix !== '/work/') && (
                                 <p className="text-sm text-gray-500 mb-2">
                                     公開日: {new Date(publishedAt).toLocaleDateString()}
+                                </p>
+                            )}
+                            {(createDate && linkPrefix === '/work/') && (
+                                <p className="text-sm text-gray-500 mb-2">
+                                    制作時期: {createDate}
                                 </p>
                             )}
                             {summary && <p className="text-gray-600 text-sm mb-2 flex-grow">{summary}</p>}

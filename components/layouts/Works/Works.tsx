@@ -14,7 +14,7 @@ interface WorkItem {
         width: number;
     };
     tags: Tag[];
-    publishedAt?: string;
+    createDate?: string;
     summary?: string;
 }
 
@@ -34,7 +34,7 @@ export default function Works({ works }: WorksProps) {
                             title={work.title}
                             thumbnailUrl={`/ogp/work/${work.id}.webp`}
                             tags={work.tags}
-                            publishedAt={work.publishedAt}
+                            createDate={work.createDate}
                             summary={work.summary}
                         />
                     ))}

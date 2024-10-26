@@ -7,7 +7,7 @@ import ToptoWork from './scroll-to-work';
 interface WorkItem {
   id: string;
   title: string;
-  publishedAt: string;
+  createDate: string;
   summary: string;
   thumbnail: {
     url: string;
@@ -29,7 +29,7 @@ async function getWorks(): Promise<WorkItem[]> {
         },
       },
       endpoint: process.env.SERVICE_DOMAIN as string,
-      queries: {fields: 'id,publishedAt,title,thumbnail,tags,summary,category' ,filters: 'category[contains]works' },
+      queries: {fields: 'id,createDate,title,thumbnail,tags,summary,category' ,filters: 'category[contains]works' },
     });
     return data; // Remove .contents as getAllContents directly returns the array of items
   } catch (error) {

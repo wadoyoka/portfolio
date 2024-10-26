@@ -42,6 +42,7 @@ function ResultGrid({ items, linkPrefix }: { items: SearchResult[], linkPrefix: 
                     tags={item.tags}
                     linkPrefix={linkPrefix}
                     publishedAt={item.publishedAt}
+                    createDate={item.createDate}
                     summary={item.summary}
                 />
             ))}
