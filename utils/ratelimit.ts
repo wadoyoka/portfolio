@@ -26,9 +26,11 @@ const GLOBAL_MAX_REQUESTS = 100
 
 async function getClientIP(req: NextRequest): Promise<string> {
     const forwardedFor = req.headers.get('x-forwarded-for')
+    const realIPTest = req.headers.get('x-real-ip')
     if (forwardedFor) {
         console.log('forwardedFor\t'+forwardedFor)
         console.log('forwardedFor\t'+forwardedFor.split(',')[0].trim())
+        console.log('realIP\t'+realIPTest)
         return forwardedFor.split(',')[0].trim()
     }
 
