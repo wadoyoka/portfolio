@@ -4,6 +4,7 @@ import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+  console.log('microHello')
   // ここの設定と各tagsの中身の検証があるよ
   const apiKey = request.headers.get("X-WEBHOOK-API-KEY");
   const ispass = await CryptoUtils.comparePassword(process.env.SECRET_MICRO_CMS_KEY as string, apiKey as string);
