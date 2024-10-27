@@ -1,11 +1,13 @@
 import Card from '@/components/elements/Card/Card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { performSearch, SearchResult } from '@/utils/Search';
+import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
 async function SearchResults({ query }: { query: string }) {
+    const enhancedUniqueId = cookies().get('enhancedUniqueId')?.value;
     
-    const results = await performSearch(query)
+    const results = await performSearch(query, (enhancedUniqueId as string));
 
     if (!results.success) {
         return <div className="text-red-500">{results.message}</div>

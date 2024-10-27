@@ -20,13 +20,13 @@ export type SearchResult = {
     }
 }
 
-export async function performSearch(query: string): Promise<{ success: boolean; message: string; remainingAttempts: number; results: SearchResult[] }> {
+export async function performSearch(query: string, enhancedUniqueId: string): Promise<{ success: boolean; message: string; remainingAttempts: number; results: SearchResult[] }> {
     const mockRequest = {
         headers: headers(),
         ip: (await headers()).get('x-forwarded-for') || 'unknown',
     } as unknown as NextRequest
 
-    const { allowed, message, remainingAttempts } = await checkRateLimitAction(mockRequest, 'search')
+    const { allowed, message, remainingAttempts } = await checkRateLimitAction(mockRequest, 'search', enhancedUniqueId)
 
     if (!allowed) {
         return { success: false, message, remainingAttempts, results: [] }
