@@ -2,7 +2,9 @@
 
 import { Redis } from '@upstash/redis'
 import { createHash } from 'crypto'
+import dns from 'dns'
 import { NextRequest } from 'next/server'
+import { promisify } from 'util'
 
 const redis = new Redis({
     url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -24,6 +26,8 @@ const LIMITS = {
 // Global limit to prevent DDoS
 const GLOBAL_MAX_REQUESTS = 100
 
+const reverseDns = promisify(dns.reverse)
+
 async function getClientIP(req: NextRequest): Promise<string> {
     const forwardedFor = req.headers.get('x-forwarded-for')
     if (forwardedFor) {
@@ -38,26 +42,37 @@ async function getClientIP(req: NextRequest): Promise<string> {
     return forwardedFor ?? 'unknown'
 }
 
-function hashIP(ip: string): string {
-    return createHash('sha256').update(ip + process.env.IP_SALT).digest('hex')
+async function getHostname(ip: string): Promise<string> {
+    try {
+        const hostnames = await reverseDns(ip)
+        return hostnames[0] || 'unknown'
+    } catch (error) {
+        console.error('Error resolving hostname:', error)
+        return 'unknown'
+    }
 }
 
-async function isIPBlocked(hashedIP: string): Promise<boolean> {
-    const blocked = await redis.get(`blocked:${hashedIP}`)
+function hashIdentifier(identifier: string): string {
+    return createHash('sha256').update(identifier + process.env.IDENTIFIER_SALT).digest('hex')
+}
+
+async function isIdentifierBlocked(hashedIdentifier: string): Promise<boolean> {
+    const blocked = await redis.get(`blocked:${hashedIdentifier}`)
     return !!blocked
 }
 
-async function blockIP(hashedIP: string): Promise<void> {
-    await redis.set(`blocked:${hashedIP}`, '1', { ex: BLOCK_DURATION })
+async function blockIdentifier(hashedIdentifier: string): Promise<void> {
+    await redis.set(`blocked:${hashedIdentifier}`, '1', { ex: BLOCK_DURATION })
 }
 
-async function checkRateLimit(hashedIP: string, action: 'email' | 'search' | 'login'): Promise<boolean> {
+
+async function checkRateLimit(hashedIdentifier: string, action: 'email' | 'search' | 'login'): Promise<boolean> {
     const now = Math.floor(Date.now() / 1000)
-    const actionKey = `ratelimit:${action}:${hashedIP}`
-    const globalKey = `ratelimit:global:${hashedIP}`
+    const actionKey = `ratelimit:${action}:${hashedIdentifier}`
+    const globalKey = `ratelimit:global:${hashedIdentifier}`
 
     const pipeline = redis.pipeline()
-    
+
     // Action-specific rate limit
     pipeline.zremrangebyscore(actionKey, 0, now - LIMITS[action].window)
     pipeline.zadd(actionKey, { score: now, member: now.toString() })
@@ -75,7 +90,7 @@ async function checkRateLimit(hashedIP: string, action: 'email' | 'search' | 'lo
     const globalRequestCount = results[6] as number
 
     if (actionRequestCount > LIMITS[action].max || globalRequestCount > GLOBAL_MAX_REQUESTS) {
-        await blockIP(hashedIP)
+        await blockIdentifier(hashedIdentifier)
         return false
     }
 
@@ -84,20 +99,22 @@ async function checkRateLimit(hashedIP: string, action: 'email' | 'search' | 'lo
 
 export async function checkRateLimitAction(req: NextRequest, action: 'email' | 'search' | 'login'): Promise<{ allowed: boolean; message: string; remainingAttempts: number }> {
     const ip = await getClientIP(req)
-    const hashedIP = hashIP(ip)
+    const hostname = await getHostname(ip)
+    const hasedInfo = hashIdentifier(ip + hostname)
 
-    if (await isIPBlocked(hashedIP)) {
-        return { allowed: false, message: 'Your IP has been temporarily blocked due to excessive requests.', remainingAttempts: 0 }
+    if (await isIdentifierBlocked(hasedInfo)) {
+        return { allowed: false, message: 'Your access has been temporarily blocked due to excessive requests.', remainingAttempts: 0 }
     }
 
-    const allowed = await checkRateLimit(hashedIP, action)
-    const key = `ratelimit:${action}:${hashedIP}`
+    const allowedInfo = await checkRateLimit(hasedInfo, action)
+
+    if (!allowedInfo) {
+        return { allowed: false, message: `${action} rate limit exceeded. Please try again later.`, remainingAttempts: 0 }
+    }
+
+    const key = `ratelimit:${action}:${hasedInfo}`
     const requestCount = await redis.zcard(key)
     const remainingAttempts = Math.max(0, LIMITS[action].max - requestCount)
 
-    if (allowed) {
-        return { allowed: true, message: 'Action allowed', remainingAttempts }
-    } else {
-        return { allowed: false, message: `${action} rate limit exceeded. Please try again later.`, remainingAttempts }
-    }
+    return { allowed: true, message: 'Action allowed', remainingAttempts }
 }
