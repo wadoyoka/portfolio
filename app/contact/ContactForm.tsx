@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { sendEmail } from "@/utils/mail"
+import { parseCookies } from "nookies"
 import { useState, useTransition } from 'react'
 
 export default function ContactForm() {
@@ -36,7 +37,10 @@ export default function ContactForm() {
                 formDataToSend.append(key, value)
             })
 
-            const result = await sendEmail(formDataToSend)
+            const cookies = parseCookies()
+            const enhancedUniqueId = cookies.enhancedUniqueId
+
+            const result = await sendEmail(formDataToSend, enhancedUniqueId);
             if (result.success) {
                 toast({ title: "送信完了", description: "メールは正しく送信されました！" })
             } else {

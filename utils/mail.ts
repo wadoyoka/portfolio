@@ -38,7 +38,7 @@ transporter.verify((error) => {
     }
 })
 
-export async function sendEmail(formData: FormData) {
+export async function sendEmail(formData: FormData, enhancedUniqueId:string) {
     // Create a mock NextRequest object
     const headersList = await headers()
     const mockRequest = {
@@ -62,7 +62,7 @@ export async function sendEmail(formData: FormData) {
     } as unknown as NextRequest
 
     // Check email rate limit
-    const { allowed, message: rateMessage, remainingAttempts } = await checkRateLimitAction(mockRequest, 'email')
+    const { allowed, message: rateMessage, remainingAttempts } = await checkRateLimitAction(mockRequest, 'email', enhancedUniqueId)
     if (!allowed) {
         return { success: false, message: rateMessage, remainingAttempts }
     }

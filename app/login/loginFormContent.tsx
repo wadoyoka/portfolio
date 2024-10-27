@@ -6,6 +6,16 @@ import { Label } from "@/components/ui/label"
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState, useTransition } from 'react'
+// Cookieの取得と設定
+import { CryptoUtils } from "@/utils/crypto-utils"
+import { parseCookies, setCookie } from 'nookies'
+
+
+function generateRandomString(length: number): string {
+    const array = new Uint8Array(length)
+    crypto.getRandomValues(array)
+    return Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join('')
+}
 
 export default function LoginFormContent() {
     const [username, setUsername] = useState('')
@@ -17,6 +27,51 @@ export default function LoginFormContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get('callbackUrl') || '/'
+
+
+
+    useEffect(() => {
+        const cookies = parseCookies()
+
+        if (!cookies.enhancedUniqueId) {
+            const setEnhancedUniqueCookie = async () => {
+                try {
+                    // IPアドレスを取得（例としてipify.orgのAPIを使用）
+                    const ipResponse = await fetch('https://api.ipify.org?format=json')
+                    const ipData = await ipResponse.json()
+                    const ip = ipData.ip
+
+                    // 現在の時刻を取得
+                    const timestamp = new Date().getTime()
+
+                    // ランダムな文字列を生成（例: 16バイト）
+                    const randomString = generateRandomString(16)
+
+                    // IPアドレス、時刻、ランダムな文字列を組み合わせてハッシュ化
+                    const uniqueString = `${ip}-${timestamp}-${randomString}`
+                    const hash = CryptoUtils.sha256Hash(uniqueString);
+
+                    // ハッシュ化された値をCookieとして設定
+                    setCookie(null, 'enhancedUniqueId', hash, {
+                        maxAge: 30 * 24 * 60 * 60, // 30日間
+                        path: '/',
+                        secure: true, // HTTPS接続でのみCookieを送信
+                        sameSite: 'strict' // CSRF攻撃を防ぐ
+                    })
+
+                    console.log('Enhanced unique cookie set')
+                } catch (error) {
+                    console.error('Error setting enhanced unique cookie:', error)
+                }
+            }
+
+            setEnhancedUniqueCookie()
+        } else {
+            console.log('Enhanced unique cookie already exists')
+        }
+    }, [])
+
+
 
     const submitButtonContent = {
         preText: "ログイン",
@@ -36,10 +91,13 @@ export default function LoginFormContent() {
         setRemainingAttempts(null)
         startTransition(async () => {
             try {
+                const cookies = parseCookies()
+                const enhancedUniqueId = cookies.enhancedUniqueId
                 const result = await signIn('credentials', {
                     redirect: false,
                     username,
                     password,
+                    enhancedUniqueId
                 })
 
                 if (result?.error) {

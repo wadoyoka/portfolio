@@ -41,10 +41,11 @@ const authOptions: NextAuthOptions = {
             name: "Credentials",
             credentials: {
                 username: { label: "Username", type: "text" },
-                password: { label: "Password", type: "password" }
+                password: { label: "Password", type: "password" },
+                enhancedUniqueId:{label:"EnhancedUniqueId" ,type: "text"}
             },
             async authorize(credentials) {
-                if (!credentials?.username || !credentials?.password) {
+                if (!credentials?.username || !credentials?.password || !credentials?.enhancedUniqueId) {
                     return null;
                 }
 
@@ -53,7 +54,7 @@ const authOptions: NextAuthOptions = {
                         headers: headers(),
                         ip: (await headers()).get('x-forwarded-for') || 'unknown',
                     } as unknown as NextRequest
-                    const rateLimitResult = await checkRateLimitAction(mockRequest, 'login');
+                    const rateLimitResult = await checkRateLimitAction(mockRequest, 'login' , credentials.enhancedUniqueId);
 
                     if (!rateLimitResult.allowed) {
                         throw new Error(JSON.stringify({
