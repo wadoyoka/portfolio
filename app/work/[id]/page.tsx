@@ -3,9 +3,9 @@ import About from "@/components/layouts/About/About"
 import styles from "@/components/layouts/Article/Article.module.scss"
 import { TableOfContents } from '@/components/layouts/TableOfContents/TableOfContents'
 import { renderToc } from '@/libs/render-toc'
+import ContentsBodyParser from "@/utils/ContentsBodyParser"
 import createOgp from "@/utils/ogpUtils"
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
-import parse from 'html-react-parser'
 import { Metadata } from "next"
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
@@ -88,6 +88,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     const toc = renderToc(work.body);
 
+    const BodyContents =ContentsBodyParser(work.body);
+
     return (
         <>
             <main>
@@ -121,7 +123,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         <p className="text-xl mb-8">{work.summary}</p>
                         <TableOfContents toc={toc} />
                         <div className={`${styles.post} prose max-w-none`}>
-                            {parse(work.body)}
+                            {BodyContents}
                         </div>
                     </article>
                 </div>

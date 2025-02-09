@@ -3,10 +3,10 @@ import About from "@/components/layouts/About/About"
 import styles from "@/components/layouts/Article/Article.module.scss"
 import { TableOfContents } from '@/components/layouts/TableOfContents/TableOfContents'
 import { renderToc } from '@/libs/render-toc'
+import ContentsBodyParser from "@/utils/ContentsBodyParser"
 import { getAllContentIds, getContentById } from '@/utils/SSG/ssgUtils'
 import { formatDate } from '@/utils/dateUtils'
 import createOgp from "@/utils/ogpUtils"
-import parse from 'html-react-parser'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
@@ -131,6 +131,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
 
     const toc = renderToc(post.body);
 
+    const BodyContents = ContentsBodyParser(post.body);
+
+
     return (
         <div>
             <div className="container mx-auto px-4 py-8 max-w-7xl mb-32">
@@ -162,7 +165,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
                         <TableOfContents toc={toc} />
                     </nav>
                     <div className={`${styles.post} prose max-w-none`} itemProp="articleBody">
-                        {parse(post.body)}
+                        {BodyContents}
                     </div>
                 </article>
             </div>
