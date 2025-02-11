@@ -1,6 +1,7 @@
 import CopyButton from "@/components/elements/CopyButton/CopyButton"
 import parse, { domToReact, Element, type HTMLReactParserOptions, type Text } from "html-react-parser"
 import Image from "next/image"
+import Link from "next/link"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism"
 
@@ -23,13 +24,15 @@ const replace: Replace = (domNode) => {
     if (domNode.name === "img") {
         const { src, alt, width, height } = domNode.attribs
         return (
-            <Image
-                src={src || "/placeholder.svg"}
-                width={width ? Number.parseInt(width, 10) : 500}
-                height={height ? Number.parseInt(height, 10) : 300}
-                alt={alt || "Image"}
-                className="rounded-lg mx-auto"
-            />
+            <Link href={src} className="inline-block" target="_blank" rel="noopener noreferrer">
+                    <Image
+                        src={src || "/placeholder.svg"}
+                        width={width ? Number.parseInt(width, 10) : 500}
+                        height={height ? Number.parseInt(height, 10) : 300}
+                        alt={alt || "Image"}
+                        className="rounded-lg mx-auto duration-300 hover:opacity-60"
+                    />
+            </Link>
         )
     }
 
