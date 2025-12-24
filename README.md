@@ -30,28 +30,10 @@ Enomoto Atsushi のポートフォリオサイトです。制作物やブログ�
 
 ### 環境変数
 
-`.env.local` ファイルを作成し、以下の環境変数を設定してください:
+`.env.template` をコピーして `.env.local` を作成し、各値を設定してください:
 
-```env
-# microCMS
-API_KEY=your_microcms_api_key
-SERVICE_DOMAIN=your_service_domain
-
-# Firebase
-FIREBASE_PROJECT_ID=your_project_id
-FIREBASE_CLIENT_EMAIL=your_client_email
-FIREBASE_PRIVATE_KEY=your_private_key
-
-# NextAuth
-NEXTAUTH_SECRET=your_secret
-NEXTAUTH_URL=http://localhost:3000
-
-# Site
-NEXT_PUBLIC_SITE_URL=https://your-domain.com
-
-# Upstash Redis (レート制限用)
-UPSTASH_REDIS_REST_URL=your_redis_url
-UPSTASH_REDIS_REST_TOKEN=your_redis_token
+```bash
+cp .env.template .env.local
 ```
 
 ### インストール
