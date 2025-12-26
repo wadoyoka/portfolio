@@ -2,6 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FaGithub, FaTwitter } from 'react-icons/fa'
 
+const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'
+
 export default function Footer() {
     return (
         <footer className="bg-blue-600 text-white py-8 mt-auto">
@@ -10,12 +12,12 @@ export default function Footer() {
                     <div className="flex items-center mb-4 md:mb-0">
                         <Image
                             src="/logo_white.png"
-                            alt="Enomoto Atsushi Logo"
+                            alt={`${authorName} Logo`}
                             width={40}
                             height={40}
                             className="mr-2"
                         />
-                        <span className="text-xl font-bold">Enomoto Atsushi</span>
+                        <span className="text-xl font-bold">{authorName}</span>
                     </div>
                     <nav>
                         <ul className="flex space-x-6">
@@ -35,7 +37,7 @@ export default function Footer() {
                     </Link>
                 </div>
                 <div className="mt-4 text-center">
-                    <p>&copy; Enomoto Atsushi from 2024</p>
+                    <p>&copy; {authorName} from 2024</p>
                 </div>
             </div>
         </footer>

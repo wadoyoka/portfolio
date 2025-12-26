@@ -20,16 +20,18 @@ interface BlogPost {
     tags: Tag[];
 }
 
+const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'
+
 //後で確認
 export const metadata: Metadata = {
     title: 'Blog',
-    description: 'Enomoto Atsushiのブログを掲載したページです。',
+    description: `${authorName}のブログを掲載したページです。`,
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'),
     openGraph: {
         title: 'Blog',
-        description: 'Enomoto Atsushiのブログを掲載したページです。',
+        description: `${authorName}のブログを掲載したページです。`,
         url: '/blog',
-        siteName: 'Atsushi Portfolio',
+        siteName: `${authorName} Portfolio`,
         images: [
             {
                 url: '/ogp/og-image.webp',
@@ -43,7 +45,7 @@ export const metadata: Metadata = {
     twitter: {
         card: 'summary_large_image',
         title: 'Blog',
-        description: 'Enomoto Atsushiのブログを掲載したページです。',
+        description: `${authorName}のブログを掲載したページです。`,
         images: [{
             url: '/ogp/og-image.webp',
             width: 1200,

@@ -5,6 +5,8 @@ import Link from 'next/link'
 import HamburgerMenu from './HamburgerMenu'
 import MobileSearch from './MobileSearch'
 
+const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'
+
 const menuItems = [
     { href: "/", label: "Top" },
     { href: "/about", label: "About" },
@@ -22,12 +24,12 @@ export default function Header() {
                 <Link href="/" className="flex items-center hover:opacity-60 duration-300">
                     <Image
                         src="/logo.png"
-                        alt="Enomoto Atsushi Logo"
+                        alt={`${authorName} Logo`}
                         width={40}
                         height={40}
                         className="ml-2 mr-2"
                     />
-                    <span className="text-2xl font-bold">Enomoto Atsushi</span>
+                    <span className="text-2xl font-bold">{authorName}</span>
                 </Link>
                 <nav className="hidden md:block">
                     <ul className="flex space-x-6">

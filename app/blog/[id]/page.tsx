@@ -44,6 +44,7 @@ interface BlogPost {
 }
 
 const SERVICE_DOMAIN = process.env.SERVICE_DOMAIN as string;
+const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'
 if (!SERVICE_DOMAIN) {
     throw new Error('SERVICE_DOMAIN is not defined in environment variables');
 }
@@ -83,7 +84,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
             title: post.title,
             description: post.summary,
             url: `/blog/${resolvedParams.id}`,
-            siteName: 'Atsushi Portfolio',
+            siteName: `${authorName} Portfolio`,
             images: [
                 {
                     url: `/ogp/blog/${post.id}.webp`,

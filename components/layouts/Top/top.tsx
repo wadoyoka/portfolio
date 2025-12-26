@@ -1,4 +1,7 @@
 import Image from "next/image"
+
+const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'
+
 const Top = () => {
     return (
         <div className="flex-grow container mx-auto px-4 pt-12 mb-12 flex items-center justify-center md:min-h-[90vh]">
@@ -6,13 +9,13 @@ const Top = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-center">
                     <div className="text-center col-span-1 md:col-span-3">
                         <h1 className="text-7xl sm:text-8xl md:text-9xl font-bold mb-4">
-                            Enomoto Atsushi
+                            {authorName}
                         </h1>
                     </div>
                     <div className="flex justify-center md:justify-end col-span-1">
                         <Image
                             src="/logo.png"
-                            alt="Enomoto Atsushi"
+                            alt={authorName}
                             width={300}
                             height={300}
                             className="rounded-full"

@@ -22,7 +22,7 @@ export default function LoginForm() {
                                 />
                             </div>
                             <div className="text-2xl font-bold text-center">
-                                Atsushi Portfolio
+                                {process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'} Portfolio
                             </div>
                         </div>
                     </CardTitle>

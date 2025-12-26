@@ -4,15 +4,17 @@ import Link from 'next/link'
 import { FaGithub, FaTwitter } from 'react-icons/fa'
 
 //後で確認
+const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'
+
 export const metadata: Metadata = {
     title: 'About',
-    description: 'Enomoto Atsushiと当ポートフォリオについて説明したページです。',
+    description: `${authorName}と当ポートフォリオについて説明したページです。`,
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'),
     openGraph: {
         title: 'About',
-        description: 'Enomoto Atsushiと当ポートフォリオについて説明したページです。',
+        description: `${authorName}と当ポートフォリオについて説明したページです。`,
         url: '/about',
-        siteName: 'Atsushi Portfolio',
+        siteName: `${authorName} Portfolio`,
         images: [
             {
                 url: '/ogp/og-image.webp',
@@ -25,8 +27,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Atsushi Portfolio',
-        description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
+        title: `${authorName} Portfolio`,
+        description: `ここは${authorName}のポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!`,
         images: [{
             url: '/ogp/og-image.webp',
             width: 1200,
@@ -42,7 +44,7 @@ export default function About() {
             <div className="w-full">
                 <div className="flex flex-col md:flex-row items-center md:items-start justify-between">
                     <div className="md:w-2/3 mb-8 md:mb-0 md:pr-4">
-                        <h1 className="text-4xl font-bold mb-4">Enomoto Atsushi</h1>
+                        <h1 className="text-4xl font-bold mb-4">{process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'}</h1>
                         <h2 className="text-2xl mb-4">東京電機大学　情報メディア学科</h2>
                         <p className="mb-4">
                             2022年に東京電機大学の情報メディア学科に入学してから、主に
@@ -66,7 +68,7 @@ export default function About() {
                     <div className="md:w-1/3">
                         <Image
                             src="/logo.png"
-                            alt="Enomoto Atsushi Logo"
+                            alt={`${process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'} Logo`}
                             width={300}
                             height={300}
                             className="rounded-full"

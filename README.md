@@ -1,6 +1,6 @@
-# Atsushi Portfolio
+# Portfolio
 
-Enomoto Atsushi のポートフォリオサイトです。制作物やブログを掲載しています。
+ポートフォリオサイトです。制作物やブログを掲載しています。
 
 ## 技術スタック
 

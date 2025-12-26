@@ -40,6 +40,8 @@ export async function generateStaticParams() {
     return tagIds.map((id) => ({ id }));
 }
 
+const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const resolvedParams = await params;
     const tag = await getTagById(resolvedParams.id);
@@ -51,13 +53,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     return {
         title: tag.tag,
-        description: `Enomoto Atsushiのタグ「${tag.tag}」に関する制作物、ブログを集めたページです。`,
+        description: `${authorName}のタグ「${tag.tag}」に関する制作物、ブログを集めたページです。`,
         metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'),
         openGraph: {
             title: tag.tag,
-            description: `Enomoto Atsushiのタグ「${tag.tag}」に関する制作物、ブログを集めたページです。`,
+            description: `${authorName}のタグ「${tag.tag}」に関する制作物、ブログを集めたページです。`,
             url: `/tag/${tag.id}`,
-            siteName: 'Atsushi Portfolio',
+            siteName: `${authorName} Portfolio`,
             images: [
                 {
                     url: '/ogp/og-image.webp',
@@ -71,7 +73,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         twitter: {
             card: 'summary_large_image',
             title: tag.tag,
-            description: `Enomoto Atsushiのタグ「${tag.tag}」に関する制作物、ブログを集めたページです。`,
+            description: `${authorName}のタグ「${tag.tag}」に関する制作物、ブログを集めたページです。`,
             images: [{
                 url: '/ogp/og-image.webp',
                 width: 1200,

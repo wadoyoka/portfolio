@@ -32,6 +32,7 @@ interface WorkItem {
 }
 
 const SERVICE_DOMAIN = process.env.SERVICE_DOMAIN as string;
+const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'
 
 async function getWork(id: string): Promise<WorkItem> {
     try {
@@ -145,7 +146,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
             title: post.title,
             description: post.summary,
             url: `/work/${post.id}`,
-            siteName: 'Atsushi Portfolio',
+            siteName: `${authorName} Portfolio`,
             images: [
                 {
                     url: `/ogp/work/${post.id}.webp`,

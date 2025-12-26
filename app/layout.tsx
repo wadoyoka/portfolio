@@ -9,22 +9,23 @@ import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'] })
 
+const authorName = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Author Name'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Atsushi Portfolio',
-    template: '%s | Atsushi Portfolio',
+    default: `${authorName} Portfolio`,
+    template: `%s | ${authorName} Portfolio`,
   },
-  description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
+  description: `ここは${authorName}のポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!`,
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'),
   openGraph: {
     title: {
-      default: 'Atsushi Portfolio',
-      template: '%s | Atsushi Portfolio',
+      default: `${authorName} Portfolio`,
+      template: `%s | ${authorName} Portfolio`,
     },
-    description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
+    description: `ここは${authorName}のポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!`,
     url: '/',
-    siteName: 'Atsushi Portfolio',
+    siteName: `${authorName} Portfolio`,
     images: [
       {
         url: '/ogp/og-image.webp',
@@ -38,10 +39,10 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: {
-      default: 'Atsushi Portfolio',
-      template: '%s | Atsushi Portfolio',
+      default: `${authorName} Portfolio`,
+      template: `%s | ${authorName} Portfolio`,
     },
-    description: 'ここはEnomoto Atsushiのポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!',
+    description: `ここは${authorName}のポートフォリオサイトです。私が過去に作った制作物や、ブログを掲載しています。是非見ていってください!`,
     images: [{
       url: '/ogp/og-image.webp',
       width: 1200,
@@ -71,11 +72,11 @@ export const metadata: Metadata = {
     ],
   },
   manifest: '/favicons/site.webmanifest',
-  applicationName: 'Atsushi Portfolio',
-  keywords: ['portfolio', 'web development', 'Atsushi Enomoto', 'projects', 'blog'],
-  authors: [{ name: 'Atsushi Enomoto' }],
-  creator: 'Atsushi Enomoto',
-  publisher: 'Atsushi Enomoto',
+  applicationName: `${authorName} Portfolio`,
+  keywords: ['portfolio', 'web development', authorName, 'projects', 'blog'],
+  authors: [{ name: authorName }],
+  creator: authorName,
+  publisher: authorName,
 }
 
 export default async function RootLayout({
